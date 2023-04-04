@@ -6,7 +6,7 @@ import json
 from flask import request
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 import os
-
+from logica.tareas import get_tasks,create_task, get_task
 
 def is_valid(api_key):
     if api_key == os.getenv("API_KEY"):
@@ -17,25 +17,22 @@ class VistaTasks(Resource):
     @jwt_required
     def get(self):
         user_id = get_jwt_identity()
-        return "Permite recuperar todas las tareas de conversión de un usuario autorizado en la aplicación. "
+        tasks = get_tasks(request,user_id)
+        return tasks
     
     @jwt_required
     def post(self):
         user_id = get_jwt_identity()
-        return "Permite crear una nueva tarea de conversión de formatos. El usuario requiere autorización"
-
+        new_task = create_task(request,user_id)
+        return new_task
 class VistaTask(Resource):
 
     @jwt_required
     class VistaTask(Resource):
-        def get(self, id_task):
+        def get(self, task_id):
             user_id = get_jwt_identity()
-            # tarea = Tarea.query.get(id_task)
-            # if tarea is not None:
-            #     return tarea.serialize()
-            # else:
-            #     return {'mensaje': f'La tarea con id {id_task} no existe'}, 404
-            return "Retorno application/json. Con un diccionario de la tarea especificada por un usuario."
+            task = get_task(task_id, user_id )
+            return task
 
     @jwt_required
     def delete(self):
