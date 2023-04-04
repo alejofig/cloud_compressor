@@ -22,6 +22,12 @@ class EstadoSolicitud(enum.Enum):
     completada = 'completada'
 
 class EstadoConversionArchivo(enum.Enum):
+    pendiente = 'pendiente'
+    exitosa = 'exitosa'
+    fallida = 'fallida'
+
+class EstadoConversionArchivo(enum.Enum):
+    pendiente = 'pendiente'
     exitosa = 'exitosa'
     fallida = 'fallida'
 
@@ -38,6 +44,7 @@ class Usuario(db.Model):
     usuario = db.Column(db.String(50))
     contrasena = db.Column(db.String(50))
     correo_electronico = db.Column(db.String(50))
+    archivos = relationship('Archivo', backref='usuario')
 
 
 class Archivo(db.Model):
@@ -48,9 +55,10 @@ class Archivo(db.Model):
     size = db.Column(db.Integer, nullable=False)
     formato_origen = db.Column(db.String(255), nullable=False)
     formato_destino = db.Column(db.String(255), nullable=False)
-    fecha_subida = db.Column(DateTime, nullable=False)
+    fecha_subida = db.Column(DateTime, nullable=False, default=datetime.utcnow)
     estado = db.Column(db.Enum(EstadoConversion), nullable=False)
-
+    url_original = db.Column(db.String(255), nullable=False)
+    url_modificado = db.Column(db.String(255), nullable=False)
     id_usuario = db.Column(db.Integer, ForeignKey('usuarios.id'), nullable=False)
 
     solicitudes = relationship('Solicitud', backref='archivo')
@@ -59,7 +67,7 @@ class Solicitud(db.Model):
     __tablename__ = 'solicitudes'
 
     id = db.Column(db.Integer, primary_key=True)
-    fecha_creacion = db.Column(DateTime, nullable=False)
+    fecha_creacion = db.Column(DateTime, nullable=False, default=datetime.utcnow)
     estado = db.Column(db.Enum(EstadoSolicitud), nullable=False)
 
     id_archivo = db.Column(db.Integer, ForeignKey('archivos.id'), nullable=False)
@@ -67,11 +75,12 @@ class Solicitud(db.Model):
 
     registro_conversion = relationship('RegistroConversion', uselist=False, backref='solicitud')
 
+
 class RegistroConversion(db.Model):
     __tablename__ = 'registros_conversion'
 
     id = db.Column(db.Integer, primary_key=True)
-    fecha_creacion = db.Column(DateTime, nullable=False)
+    fecha_creacion = db.Column(DateTime, nullable=False, default=datetime.utcnow)
     estado = db.Column(db.Enum(EstadoConversionArchivo), nullable=False)
 
     id_archivo = db.Column(db.Integer, ForeignKey('archivos.id'), nullable=False)
