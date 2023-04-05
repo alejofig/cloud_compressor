@@ -20,7 +20,7 @@ COPY process_files.sh /app
 RUN apt-get update && apt-get -y install cron
 
 # Configuramos el cronjob
-RUN crontab -l | { cat; echo "*/10 * * * * /usr/bin/flock -n /tmp/process_files.lockfile /bin/bash /app/process_files.sh >> /var/log/cron.log 2>&1"; } | crontab -
+RUN crontab -l | { cat; echo "*/2 * * * * /usr/bin/flock -n /tmp/process_files.lockfile /bin/bash /app/process_files.sh >> /var/log/cron.log 2>&1"; } | crontab -
 
 # Exponemos el puerto que utilizará Flask
 EXPOSE 5000
