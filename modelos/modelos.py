@@ -44,7 +44,7 @@ class Usuario(db.Model):
     usuario = db.Column(db.String(50))
     contrasena = db.Column(db.String(50))
     correo_electronico = db.Column(db.String(50))
-    archivos = relationship('Archivo', backref='usuario')
+    archivos = relationship('Archivo', backref='usuario',cascade="all,delete")
 
 
 class Archivo(db.Model):
@@ -57,11 +57,11 @@ class Archivo(db.Model):
     formato_destino = db.Column(db.String(255), nullable=False)
     fecha_subida = db.Column(DateTime, nullable=False, default=datetime.utcnow)
     estado = db.Column(db.Enum(EstadoConversion), nullable=False)
-    url_original = db.Column(db.String(255), nullable=False)
-    url_modificado = db.Column(db.String(255), nullable=False)
+    url_original = db.Column(db.String(255), nullable=True)
+    url_modificado = db.Column(db.String(255), nullable=True)
     id_usuario = db.Column(db.Integer, ForeignKey('usuarios.id'), nullable=False)
 
-    solicitudes = relationship('Solicitud', backref='archivo')
+    solicitudes = relationship('Solicitud', backref='archivo',cascade="all,delete")
 
 class Solicitud(db.Model):
     __tablename__ = 'solicitudes'
@@ -73,7 +73,7 @@ class Solicitud(db.Model):
     id_archivo = db.Column(db.Integer, ForeignKey('archivos.id'), nullable=False)
     id_usuario = db.Column(db.Integer, ForeignKey('usuarios.id'), nullable=False)
 
-    registro_conversion = relationship('RegistroConversion', uselist=False, backref='solicitud')
+    registro_conversion = relationship('RegistroConversion', uselist=False, backref='solicitud',cascade="all,delete")
 
 
 class RegistroConversion(db.Model):
