@@ -17,7 +17,7 @@ COPY . .
 COPY process_files.sh /app
 
 # Instalamos el paquete cron
-RUN apt-get update && apt-get -y install cron
+RUN apt-get update && apt-get -y install cron p7zip-full
 
 # Configuramos el cronjob
 RUN crontab -l | { cat; echo "*/2 * * * * /usr/bin/flock -n /tmp/process_files.lockfile /bin/bash /app/process_files.sh >> /var/log/cron.log 2>&1"; } | crontab -

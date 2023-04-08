@@ -4,4 +4,4 @@
 cd /app
 
 # Ejecuta la función procesar_archivos
-python app.py procesar_archivos
+flask procesar
