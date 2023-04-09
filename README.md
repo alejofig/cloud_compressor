@@ -22,14 +22,14 @@ Para ejecutar la aplicación, se utiliza el archivo docker-compose.yml. Este arc
 
 - Para ejecutar el compose en local:
 
-docker-compose up --build       
-docker-compose down
-docker-compose up -d
+ * docker-compose up --build       
+ * docker-compose down
+ * docker-compose up -d
 
 - Para ejecutar la app en una instancia de aws:
 Se deben tener las credenciales de aws configuradas. Se debe tener el main.tf y ejecutar:
-terraform init
-terraform apply
+* terraform init
+* terraform apply
 
 ## Conclusiones
 En conclusión, la arquitectura de la aplicación web Cloud Conversion Tool está diseñada para proporcionar una solución escalable y fácil de administrar para la conversión y compresión de archivos multimedia. La aplicación utiliza contenedores Docker para gestionar cada componente de la aplicación y se integra con Redis y Celery para ofrecer una gestión de tareas en segundo plano más eficiente. La aplicación está diseñada para ser ofrecida de forma gratuita a los usuarios de internet y proporciona una interfaz de usuario intuitiva para la carga y conversión de archivos multimedia.
