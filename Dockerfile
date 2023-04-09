@@ -13,9 +13,11 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Copiamos el código fuente al contenedor
 COPY . .
 
+
 # Agregamos el archivo process_files.sh al contenedor
 COPY process_files.sh /app
 
+RUN chmod +x /app/process_files.sh
 # Instalamos el paquete cron
 RUN apt-get update && apt-get -y install cron p7zip-full
 
