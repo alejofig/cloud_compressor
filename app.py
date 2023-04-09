@@ -1,3 +1,5 @@
+from email.mime.text import MIMEText
+import smtplib
 from flask_restful import Api
 from vistas import VistaLogIn, VistaSignIn, VistaTasks, VistaTask,VistaFiles
 import serverless_wsgi
@@ -20,16 +22,12 @@ app = create_app('default')
 
 app.config['CELERY_BROKER_URL'] = os.environ.get('CELERY_BROKER_URL')
 app.config['DIRECTORIO_SALIDA'] = '/tmp'
-app.config['CORREO_ELECTRONICO'] = 'noreply@example.com'
-app.config['SERVIDOR_SMTP'] = 'smtp.example.com'
-app.config['PUERTO_SMTP'] = 587
-app.config['USUARIO_SMTP'] = 'smtp_username'
-app.config['PASSWORD_SMTP'] = 'smtp_password'
+app.config['CORREO_ELECTRONICO'] = os.environ.get('CORREO_ELECTRONICO')
+app.config['SERVIDOR_SMTP'] = os.environ.get('SERVIDOR_SMTP')
+app.config['PUERTO_SMTP'] = os.environ.get('PUERTO_SMTP')
+app.config['USUARIO_SMTP'] = os.environ.get('USUARIO_SMTP')
+app.config['PASSWORD_SMTP'] = os.environ.get('PASSWORD_SMTP')
 app.config["JWT_ALGORITHM"] = "HS256"
-app.config['AWS_SECRET_ACCESS_KEY'] = 'your_secret_key'
-app.config['AWS_REGION'] = 'your_aws_region'
-app.config['AWS_S3_BUCKET'] = 'your_s3_bucket'
-app.config['AWS_S3_BUCKET_URL'] = f'https://{app.config["AWS_S3_BUCKET"]}.s3.amazonaws.com'
 app_context = app.app_context()
 app_context.push()
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
@@ -48,10 +46,12 @@ api.add_resource(VistaFiles, '/api/files/<filename>')
 @app.cli.command()
 def procesar():
     from tasks import procesar_solicitud
+
     solicitudes_pendientes = Solicitud.query.filter_by(estado=EstadoSolicitud.pendiente).all()
+    print("Enviando solicitudes: ",solicitudes_pendientes)
     for solicitud in solicitudes_pendientes:
         procesar_solicitud.delay(solicitud.id)
-
+        
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5001)
 
