@@ -5,3 +5,6 @@ data/
 data
 uploads/
 conversions/
+.terraform*
+
+terraform.*
