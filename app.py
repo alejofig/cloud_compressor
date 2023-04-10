@@ -45,6 +45,7 @@ api.add_resource(VistaFiles, '/api/files/<filename>')
 
 @app.cli.command()
 def procesar():
+    """Run jobs"""
     from tasks import procesar_solicitud
 
     solicitudes_pendientes = Solicitud.query.filter_by(estado=EstadoSolicitud.pendiente).all()

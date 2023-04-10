@@ -19,7 +19,6 @@ def procesar_solicitud(id_solicitud):
     print(f"Procesando la solicitud {id_solicitud}")
     solicitud = Solicitud.query.filter_by(id=id_solicitud).first()
     solicitud.estado = EstadoSolicitud.en_progreso
-    db.session.commit()
     archivo = solicitud.archivo
     registro_conversion = solicitud.registro_conversion
 
@@ -69,9 +68,9 @@ def procesar_solicitud(id_solicitud):
     archivo.estado = EstadoConversion.processed
     registro_conversion.estado = EstadoConversionArchivo.exitosa
     solicitud.estado = EstadoSolicitud.completada
-    db.session.commit()
     # Enviar un correo electrónico al usuario
     enviar_correo_electronico(solicitud)
+    db.session.commit()
 
 @task_postrun.connect()
 def close_session(*args,**kwargs):
