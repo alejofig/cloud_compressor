@@ -9,6 +9,22 @@ import boto3
 from celery import Celery
 from app import app
 from celery.signals import task_postrun
+from celery.signals import worker_process_init
+
+@worker_process_init.connect
+def prep_db_pool(**kwargs):
+    """
+        When Celery fork's the parent process, the db engine & connection pool is included in that.
+        But, the db connections should not be shared across processes, so we tell the engine
+        to dispose of all existing connections, which will cause new ones to be opend in the child
+        processes as needed.
+        More info: https://docs.sqlalchemy.org/en/latest/core/pooling.html#using-connection-pools-with-multiprocessing
+    """
+    # The "with" here is for a flask app using Flask-SQLAlchemy.  If you don't 
+    # have a flask app, just remove the "with" here and call .dispose()
+    # on your SQLAlchemy db engine.
+    with app.app_context():
+        db.engine.dispose()
 
 celery = Celery(__name__)
 celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
@@ -19,6 +35,7 @@ def procesar_solicitud(id_solicitud):
     print(f"Procesando la solicitud {id_solicitud}")
     solicitud = Solicitud.query.filter_by(id=id_solicitud).first()
     solicitud.estado = EstadoSolicitud.en_progreso
+    db.session.commit()
     archivo = solicitud.archivo
     registro_conversion = solicitud.registro_conversion
 
