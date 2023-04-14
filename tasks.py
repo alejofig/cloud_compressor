@@ -35,6 +35,7 @@ def procesar_solicitud(id_solicitud):
     print(f"Procesando la solicitud {id_solicitud}")
     solicitud = Solicitud.query.filter_by(id=id_solicitud).first()
     solicitud.estado = EstadoSolicitud.en_progreso
+    solicitud.fecha_inicio = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')
     db.session.commit()
     archivo = solicitud.archivo
     registro_conversion = solicitud.registro_conversion

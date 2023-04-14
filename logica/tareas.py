@@ -86,6 +86,7 @@ def get_tasks(request,user_id):
                 'formato_destino': solicitud.archivo.formato_destino,
                 'estado': solicitud.estado.value,
                 'fecha_creacion': solicitud.fecha_creacion.isoformat(),
+                'fecha_inicio': solicitud.fecha_inicio.isoformat() if solicitud.fecha_inicio else "",
                 'fecha_finalizacion': solicitud.fecha_finalizacion.isoformat() if solicitud.fecha_finalizacion else "",
                 'registro_conversion': {
                     'id': registro_conversion.id,
