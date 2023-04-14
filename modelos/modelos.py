@@ -69,7 +69,7 @@ class Solicitud(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fecha_creacion = db.Column(DateTime, nullable=False, default=datetime.utcnow)
     estado = db.Column(db.Enum(EstadoSolicitud), nullable=False)
-
+    fecha_finalizacion = db.Column(DateTime, nullable =True)
     id_archivo = db.Column(db.Integer, ForeignKey('archivos.id'), nullable=False)
     id_usuario = db.Column(db.Integer, ForeignKey('usuarios.id'), nullable=False)
 
