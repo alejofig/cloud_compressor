@@ -9,6 +9,7 @@ COPY requirements.txt .
 
 # Instalamos las dependencias
 RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install gunicorn
 
 # Copiamos el código fuente al contenedor
 COPY . .
@@ -28,4 +29,4 @@ RUN crontab -l | { cat; echo "*/1 * * * * /usr/bin/flock -n /tmp/process_files.l
 EXPOSE 5000
 
 # Definimos el comando para ejecutar la aplicación y el cron daemon
-CMD ["sh", "-c", "cron && python app.py"]
+CMD CMD ["sh", "-c", "service cron start && gunicorn app:app -b 0.0.0.0:5000 --access-logfile -"]
