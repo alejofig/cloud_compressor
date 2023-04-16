@@ -18,7 +18,6 @@ services:
   web:
     build: .
     restart: always
-    command: sh -c "gunicorn --bind 0.0.0.0:5000 --workers 4 app:app & cron -f"
     volumes:
       - .:/app
       - ./uploads:/app/uploads
