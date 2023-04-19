@@ -52,7 +52,7 @@ resource "google_compute_instance" "web" {
     sudo apt-get -y install git cron p7zip-full
     sudo apt-get install -y python3-pip
     sudo apt-get install -y docker.io
-    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
     docker-compose --version
     git clone -b gcp https://github.com/alejofig/cloud_compressor.git
