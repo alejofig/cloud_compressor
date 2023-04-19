@@ -23,7 +23,7 @@ RUN apt-get update && apt-get -y install cron p7zip-full
 
 RUN export FLASK_APP=app.py
 
-RUN crontab -l | { cat; echo "*/1 * * * * /usr/bin/flock -n /tmp/process_files.lockfile.$RANDOM /bin/bash /app/process_files.sh >> /var/log/cron.log 2>&1"; } | crontab -
+# RUN crontab -l | { cat; echo "*/1 * * * * /usr/bin/flock -n /tmp/process_files.lockfile.$RANDOM /bin/bash /app/process_files.sh >> /var/log/cron.log 2>&1"; } | crontab -
 
 # Exponemos el puerto que utilizará Flask
 EXPOSE 5000
