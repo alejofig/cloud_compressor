@@ -62,7 +62,7 @@ services:
       CELERY_BROKER_URL: redis://redis:6379/0
       CORREO_ELECTRONICO: "clouduniandesmiso@hotmail.com"
       SERVIDOR_SMTP: "smtp-mail.outlook.com"
-      USUARIO_SMTP: "clouduniandesmiso@hotmail.com"
+      USUARIO_SMTP: "clouduniandesm iso@hotmail.com"
       PASSWORD_SMTP: "12uniandes12"
       JWT_ALGORITHM: "HS256"
       JWT_SECRET_KEY: "frase-secreta"

@@ -29,4 +29,4 @@ RUN crontab -l | { cat; echo "*/1 * * * * /usr/bin/flock -n /tmp/process_files.l
 EXPOSE 5000
 
 # Definimos el comando para ejecutar la aplicación y el cron daemon
-CMD CMD ["sh", "-c", "service cron start && gunicorn app:app -b 0.0.0.0:5000 --access-logfile -"]
+CMD ["sh", "-c", "service cron start && gunicorn app:app -b 0.0.0.0:5000 --access-logfile -"]
