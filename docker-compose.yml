@@ -5,13 +5,6 @@ services:
     build: .
     restart: always
     command: sh -c "gunicorn --bind 0.0.0.0:5000 --workers 4 app:app & cron -f"
-    volumes:
-      - .:/app
-      - ./uploads:/app/uploads
-      - ${PWD}/uploads:/app/uploads
-      - ${PWD}/uploads:/usr/src/app/uploads
-      - ${PWD}/conversions:/app/conversions
-      - ${PWD}/conversions:/usr/src/app/conversions
     ports:
       - "8000:5000"
     environment:
