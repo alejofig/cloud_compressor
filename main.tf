@@ -57,7 +57,7 @@ resource "google_compute_instance" "web" {
     sudo apt-get update
     sudo apt-get -y install git cron p7zip-full
     sudo apt-get install -y python3-pip
-    git clone -b develop https://github.com/alejofig/cloud_compressor.git
+    git clone -b gcp https://github.com/alejofig/cloud_compressor.git
     cd cloud_compressor
     pip install --no-cache-dir -r requirements.txt
     export FLASK_APP=app.py
