@@ -1,4 +1,4 @@
-# Configuración de proveedor para GCP
+# Configuración de proveedor para alejo
 provider "google" {
   project = "746411315164"
   region  = "us-central1"
@@ -45,7 +45,7 @@ resource "google_compute_instance" "web" {
     sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
     docker-compose --version
-    git clone -b gcp https://github.com/alejofig/cloud_compressor.git
+    git clone -b alejo https://github.com/alejofig/cloud_compressor.git
     cd cloud_compressor
     sudo docker-compose up -d
     echo "Nuevo"
@@ -120,7 +120,7 @@ resource "google_compute_instance" "worker" {
     sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
     docker-compose --version
-    git clone -b gcp https://github.com/alejofig/cloud_compressor.git
+    git clone -b alejo https://github.com/alejofig/cloud_compressor.git
     cd cloud_compressor
     sudo docker-compose -f docker-compose-worker.yml up -d
     echo "Nuevo"
