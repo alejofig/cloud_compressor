@@ -15,7 +15,7 @@ locals {
 }
 # Creación de red
 resource "google_compute_network" "my-network" {
-  name                    = "my-network2"
+  name                    = "my-network-redis"
   auto_create_subnetworks = true
 }
 
