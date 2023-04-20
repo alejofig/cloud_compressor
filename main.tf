@@ -48,7 +48,6 @@ resource "google_compute_instance" "web" {
     git clone -b gcp https://github.com/alejofig/cloud_compressor.git
     cd cloud_compressor
     sudo docker-compose up -d
-    echo "TERMINÓ"
     EOF
 }
 
