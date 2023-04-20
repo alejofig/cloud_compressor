@@ -1,6 +1,6 @@
 # Configuración de proveedor para GCP
 provider "google" {
-  project = "746411315164"
+  project = "725763982877"
   region  = "us-central1"
 }
 data "google_compute_zones" "available" {}
@@ -15,9 +15,9 @@ locals {
 }
 # Creación de red
 resource "google_compute_network" "my-network" {
-  name = "my-network2"
+  name                    = "my-network2"
   auto_create_subnetworks = true
-  }
+}
 
 resource "google_compute_instance" "redis" {
   name         = "redis-instance"
@@ -32,7 +32,7 @@ resource "google_compute_instance" "redis" {
 
   network_interface {
     network = google_compute_network.my-network.self_link
-      access_config {
+    access_config {
       # Asigna la dirección IP pública a la instancia
       nat_ip = google_compute_address.redis.address
     }
@@ -44,7 +44,7 @@ resource "google_compute_instance" "redis" {
     sudo sed -i 's/bind 127.0.0.1 ::1/bind 0.0.0.0 ::1/' /etc/redis/redis.conf
     sudo systemctl restart redis.service
   EOF
-  tags = ["redis"]
+  tags                    = ["redis"]
 }
 
 output "redis_ip_address" {
@@ -58,7 +58,7 @@ resource "google_compute_firewall" "redis-ssh" {
 
   allow {
     protocol = "tcp"
-    ports    = ["6379","22"]
+    ports    = ["6379", "22"]
   }
 
   source_ranges = ["0.0.0.0/0"]
