@@ -10,7 +10,7 @@ locals {
 }
 
 resource "google_compute_network" "my-network" {
-  name = "my-network"
+  name = "my-network3"
   auto_create_subnetworks = true
 }
 

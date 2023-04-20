@@ -15,28 +15,7 @@ resource "google_compute_network" "my-network" {
   auto_create_subnetworks = true
   }
 
-resource "google_compute_instance" "redis" {
-  name         = "redis-instance"
-  machine_type = "n1-standard-1"
-  zone         = local.zone
 
-  boot_disk {
-    initialize_params {
-      image = "debian-11"
-    }
-  }
-
-  network_interface {
-    network = google_compute_network.my-network.self_link
-  }
-
-  metadata_startup_script = <<-EOF
-    sudo apt-get update
-    sudo apt-get install -y redis-server
-    sudo sed -i 's/bind 127.0.0.1 ::1/bind 0.0.0.0 ::1/' /etc/redis/redis.conf
-    sudo systemctl restart redis.service
-  EOF
-}
 # Creación de instancia de máquina virtual "web"
 resource "google_compute_instance" "web" {
   name         = "web"
@@ -48,7 +27,7 @@ resource "google_compute_instance" "web" {
       image = "debian-cloud/debian-11"
     }
   }
-  depends_on = [google_compute_instance.redis, google_compute_instance.database]
+  depends_on = [google_compute_instance.database]
   # Conexión a la red
   network_interface {
     network = google_compute_network.my-network.self_link
@@ -118,10 +97,6 @@ resource "google_compute_firewall" "allow-ssh-web" {
 
 output "web_ip_address" {
   value = google_compute_instance.web.network_interface.0.access_config.0.nat_ip
-}
-
-output "redis_ip_address" {
-  value = google_compute_instance.redis.network_interface.0.network_ip
 }
 
 
@@ -194,4 +169,7 @@ output "database_ip_address" {
 }
 
 
-###### END DATABASE
+
+###### DATABASE
+
+
