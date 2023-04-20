@@ -44,8 +44,23 @@ resource "google_compute_instance" "redis" {
     sudo sed -i 's/bind 127.0.0.1 ::1/bind 0.0.0.0 ::1/' /etc/redis/redis.conf
     sudo systemctl restart redis.service
   EOF
+  tags = ["redis"]
 }
 
 output "redis_ip_address" {
   value = google_compute_instance.redis.network_interface.0.access_config.0.nat_ip
+}
+
+
+resource "google_compute_firewall" "redis-ssh" {
+  name    = "redis-ssh"
+  network = google_compute_network.my-network.self_link
+
+  allow {
+    protocol = "tcp"
+    ports    = ["6379","22"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["redis"]
 }

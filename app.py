@@ -43,14 +43,14 @@ api.add_resource(VistaTasks, '/api/tasks')
 api.add_resource(VistaTask, '/api/tasks/<int:id_task>')
 api.add_resource(VistaFiles, '/api/files/<filename>')
 
-# @app.cli.command()
-# def procesar():
-#     """Run jobs"""
-#     from tasks import procesar_solicitud
+@app.cli.command()
+def procesar():
+    """Run jobs"""
+    from tasks import procesar_solicitud
 
-#     solicitudes_pendientes = Solicitud.query.filter_by(estado=EstadoSolicitud.pendiente).all()
-#     for solicitud in solicitudes_pendientes:
-#         procesar_solicitud.delay(solicitud.id)
+    solicitudes_pendientes = Solicitud.query.filter_by(estado=EstadoSolicitud.pendiente).all()
+    for solicitud in solicitudes_pendientes:
+        procesar_solicitud.delay(solicitud.id)
         
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5001)
