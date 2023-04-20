@@ -10,7 +10,7 @@ while [ $(terraform plan -detailed-exitcode | grep -o "exit code [0-9]*" | grep 
   sleep 5
 done
 # Obtener el valor del output de Terraform y asignarlo a una variable
-database_id=$(terraform output -raw output_name)
+database_id=$(terraform output -raw database_ip_address)
 
 cd ..
 cd redis
@@ -23,13 +23,8 @@ while [ $(terraform plan -detailed-exitcode | grep -o "exit code [0-9]*" | grep 
   echo "Esperando a que Terraform termine de aplicar los cambios de redis ..."
   sleep 5
 done
-redis_ip=$(terraform output -raw output_name)
+redis_ip=$(terraform output -raw redis_ip_address)
 cd ..
-
-while [ $(terraform plan -detailed-exitcode | grep -o "exit code [0-9]*" | grep -o "[0-9]*") -eq 2 ]; do
-  echo "Esperando a que Terraform termine de aplicar los de web y worker..."
-  sleep 5
-
 
 
 sed -i "s#DATABASE_URL: postgresql://example:example@.*:5432/example#DATABASE_URL: postgresql://example:example@${database_id}:5432/example#" docker-compose.yml
@@ -47,4 +42,15 @@ sed -i "s/export CELERY_BROKER_URL=redis://.*:6379/0#CELERY_BROKER_URL: redis://
 git add .
 git commit -m "Actualización de variables de entorno con Terraform"
 git push
+
+
+# terraform init
+# terraform apply -auto-approve
+# while [ $(terraform plan -detailed-exitcode | grep -o "exit code [0-9]*" | grep -o "[0-9]*") -eq 2 ]; do
+#   echo "Esperando a que Terraform termine de aplicar los de web y worker..."
+#   sleep 5
+
+
+
+
 

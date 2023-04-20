@@ -65,6 +65,3 @@ resource "google_compute_firewall" "redis-ssh" {
   target_tags   = ["redis"]
 }
 
-output "database_ip_address" {
-  value = google_compute_instance.redis.network_interface.0.access_config.0.nat_ip
-}
