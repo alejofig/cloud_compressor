@@ -39,8 +39,7 @@ sed -E "s#DATABASE_URL: postgresql://example:example@[0-9\.]*:5432/example#DATAB
 sed -E "s#CELERY_RESULT_BACKEND: redis://.*:6379/0#CELERY_RESULT_BACKEND: redis://${redis_ip}:6379/0#" docker-compose-worker.yml > docker-compose-worker-temp.yml && mv docker-compose-worker-temp.yml docker-compose-worker.yml
 sed -E "s#CELERY_BROKER_URL: redis://.*:6379/0#CELERY_BROKER_URL: redis://${redis_ip}:6379/0#" docker-compose-worker.yml > docker-compose-worker-temp.yml && mv docker-compose-worker-temp.yml docker-compose-worker.yml
 
-redis_ip_address="34.28.188.22"
-database_ip_address="104.198.53.205"
+
 sed -E "s#export DATABASE_URL=postgresql://example:example@[0-9\.]*:5432/example#export DATABASE_URL=postgresql://example:example@${database_ip_address}:5432/example#" process_files.sh > process_files-temp.sh && mv  process_files-temp.sh process_files.sh
 sed -E "s#export CELERY_RESULT_BACKEND=redis://.*:6379/0#export CELERY_RESULT_BACKEND=redis://${redis_ip_address}:6379/0#" process_files.sh > process_files-temp.sh && mv  process_files-temp.sh process_files.sh
 sed -E "s#export CELERY_BROKER_URL=redis://.*:6379/0#export CELERY_BROKER_URL=redis://${redis_ip_address}:6379/0#" process_files.sh > process_files-temp.sh && mv  process_files-temp.sh process_files.sh
