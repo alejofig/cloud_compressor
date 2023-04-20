@@ -30,6 +30,16 @@ Se deben tener las credenciales de aws configuradas. Se debe tener el main.tf y 
  * terraform init
  * terraform apply
 
+ Para ejecutar el proyecto en gcloud se debe:
+ 1. Crear un archivo de credenciales en la cuenta de gcp con permisos suficientes.
+ 2. Levantar la base de datos con terraform. En la carpeta database se le da apply y bota una ip.
+ 3. Levantar el servidor de redis. En la carpeta de redis se le da apply y bota una ip.
+ 4. Levantar el servidor de los archivos compartidos (pendiente). en la carpeta nfs se le da apply y bota una ip.
+ 5. Modificar las variables de entorno (db,redis y nfs) en los siguientes archivos:
+    5.1. docker-compose.yml (levanta el server web)
+    5.2 docker-compose-worker.yml (levanta el worker)
+    5.3 process_files.sh (es el que tiene el contexto de las variables para ejecutar las tareas de manera async)
+
 En el archivo terraform.tfstate.backup queda la public_ip y se puede acceder mediante : http://public_ip:8000/api/auth/login
 
 ## Conclusiones
