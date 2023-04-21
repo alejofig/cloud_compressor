@@ -5,22 +5,26 @@ provider "google" {
 }
 data "google_compute_zones" "available" {}
 
-resource "google_compute_address" "nfs" {
-  name = "nfs-ip"
-}
-
 # Usa la zona por defecto "us-central1-a"
 locals {
   zone = data.google_compute_zones.available.names[0]
 }
+
 # Creación de red
 resource "google_compute_network" "my-network" {
-  name                    = "my-network2"
+  name                    = "my-network-nfs"
   auto_create_subnetworks = true
 }
 
+resource "google_compute_address" "nfs" {
+  name = "nfs-ip"
+}
+
+
+
+
 resource "google_compute_instance" "nfs" {
-  name         = "nfs-instance"
+  name         = "file-server"
   machine_type = "n1-standard-1"
   zone         = local.zone
 
@@ -41,9 +45,11 @@ resource "google_compute_instance" "nfs" {
   metadata_startup_script = <<-EOF
     sudo apt-get update
     sudo apt-get install -y nfs-kernel-server
-    sudo mkdir /archivos_compre
-    sudo chmod 777 /archivos_compre
-    sudo sh -c "echo '/archivos_compre *(rw,sync,no_subtree_check)' >> /etc/exports"
+    sudo mkdir /uploads
+    sudo mkdir /conversions
+    sudo chmod 777 /uploads
+    sudo chmod 777 /conversions
+    sudo sh -c "echo '/uploads *(rw,sync,no_subtree_check) /conversions *(rw,sync,no_subtree_check)' >> /etc/exports"
     sudo systemctl restart nfs-kernel-server
   EOF
   tags                    = ["nfs"]
