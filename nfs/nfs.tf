@@ -5,8 +5,8 @@ provider "google" {
 }
 data "google_compute_zones" "available" {}
 
-resource "google_compute_address" "redis" {
-  name = "redis-ip"
+resource "google_compute_address" "nfs" {
+  name = "nfs-ip"
 }
 
 # Usa la zona por defecto "us-central1-a"
@@ -15,12 +15,12 @@ locals {
 }
 # Creación de red
 resource "google_compute_network" "my-network" {
-  name                    = "my-network-redis"
+  name                    = "my-network2"
   auto_create_subnetworks = true
 }
 
-resource "google_compute_instance" "redis" {
-  name         = "redis-instance"
+resource "google_compute_instance" "nfs" {
+  name         = "nfs-instance"
   machine_type = "n1-standard-1"
   zone         = local.zone
 
@@ -34,33 +34,35 @@ resource "google_compute_instance" "redis" {
     network = google_compute_network.my-network.self_link
     access_config {
       # Asigna la dirección IP pública a la instancia
-      nat_ip = google_compute_address.redis.address
+      nat_ip = google_compute_address.nfs.address
     }
   }
 
   metadata_startup_script = <<-EOF
     sudo apt-get update
-    sudo apt-get install -y redis-server
-    sudo sed -i 's/bind 127.0.0.1 ::1/bind 0.0.0.0 ::1/' /etc/redis/redis.conf
-    sudo systemctl restart redis.service
+    sudo apt-get install -y nfs-kernel-server
+    sudo mkdir /archivos_compre
+    sudo chmod 777 /archivos_compre
+    sudo sh -c "echo '/archivos_compre *(rw,sync,no_subtree_check)' >> /etc/exports"
+    sudo systemctl restart nfs-kernel-server
   EOF
-  tags                    = ["redis"]
+  tags                    = ["nfs"]
 }
 
-output "redis_ip_address" {
-  value = google_compute_instance.redis.network_interface.0.access_config.0.nat_ip
+output "nfs_ip_address" {
+  value = google_compute_instance.nfs.network_interface.0.access_config.0.nat_ip
 }
 
 
-resource "google_compute_firewall" "redis-ssh" {
-  name    = "redis-ssh"
+resource "google_compute_firewall" "nfs-ssh" {
+  name    = "nfs-ssh"
   network = google_compute_network.my-network.self_link
 
   allow {
     protocol = "tcp"
-    ports    = ["6379", "22"]
+    ports    = ["2049", "22"]
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["redis"]
+  target_tags   = ["nfs"]
 }
