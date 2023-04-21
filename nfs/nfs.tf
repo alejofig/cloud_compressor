@@ -12,7 +12,7 @@ locals {
 
 # Creación de red
 resource "google_compute_network" "my-network" {
-  name                    = "my-network"
+  name                    = "my-network-nfs"
   auto_create_subnetworks = true
 }
 
