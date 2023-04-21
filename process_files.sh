@@ -1,8 +1,8 @@
 #!/bin/bash
-export DATABASE_URL=postgresql://example:example@:5432/example
-export CELERY_RESULT_BACKEND=redis://34.170.105.17:6379/0
+export DATABASE_URL=postgresql://example:example@35.188.210.153:5432/example
+export CELERY_RESULT_BACKEND=redis://35.232.156.153:6379/0
 export PUERTO_SMTP=587
-export CELERY_BROKER_URL=redis://34.170.105.17:6379/0
+export CELERY_BROKER_URL=redis://35.232.156.153:6379/0
 export CORREO_ELECTRONICO="clouduniandesmiso@hotmail.com"
 export SERVIDOR_SMTP="smtp-mail.outlook.com"
 export USUARIO_SMTP="clouduniandesmiso@hotmail.com"
