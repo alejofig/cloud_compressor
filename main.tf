@@ -49,8 +49,8 @@ resource "google_compute_instance" "web" {
     cd cloud_compressor
     sudo docker-compose up -d
     sudo apt-get -y install nfs-common
-    mkdir /cloud_compressor/uploads
-    mkdir /cloud_compressor/conversions
+    sudo mkdir /cloud_compressor/uploads
+    sudo mkdir /cloud_compressor/conversions
     sudo mount 34.70.140.200:/uploads /cloud_compressor/uploads
     sudo mount 34.70.140.200:/conversions /cloud_compressor/conversions
     echo "Nuevo"
@@ -129,8 +129,8 @@ resource "google_compute_instance" "worker" {
     cd cloud_compressor
     sudo docker-compose -f docker-compose-worker.yml up -d
     sudo apt-get -y install nfs-common
-    mkdir /cloud_compressor/uploads
-    mkdir /cloud_compressor/conversions
+    sudo mkdir /cloud_compressor/uploads
+    sudo mkdir /cloud_compressor/conversions
     sudo mount 34.70.140.200:/uploads /cloud_compressor/uploads
     sudo mount 34.70.140.200:/conversions /cloud_compressor/conversions
     echo "Nuevo"

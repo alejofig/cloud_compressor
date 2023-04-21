@@ -69,11 +69,11 @@ git commit -m "Actualización de variables de entorno con Terraform"
 git push
 
 
-# terraform init
-# terraform apply -auto-approve
-# while [ $(terraform plan -detailed-exitcode | grep -o "exit code [0-9]*" | grep -o "[0-9]*") -eq 2 ]; do
-#   echo "Esperando a que Terraform termine de aplicar los de web y worker..."
-#   sleep 5
+terraform init
+terraform apply -auto-approve
+while [ $(terraform plan -detailed-exitcode | grep -o "exit code [0-9]*" | grep -o "[0-9]*") -eq 2 ]; do
+   echo "Esperando a que Terraform termine de aplicar los de web y worker..."
+   sleep 5
 
 
 
