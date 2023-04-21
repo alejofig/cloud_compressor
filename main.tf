@@ -48,6 +48,11 @@ resource "google_compute_instance" "web" {
     git clone -b alejo https://github.com/alejofig/cloud_compressor.git
     cd cloud_compressor
     sudo docker-compose up -d
+    sudo apt-get install nfs-common
+    mkdir /cloud_compressor/uploads
+    mkdir /cloud_compressor/compartido
+    sudo mount 10.10.10.10:/uploads /cloud_compressor/uploads
+    sudo mount 10.10.10.10:/compartido /cloud_compressor/compartido
     echo "Nuevo"
     EOF
 }
@@ -123,6 +128,11 @@ resource "google_compute_instance" "worker" {
     git clone -b alejo https://github.com/alejofig/cloud_compressor.git
     cd cloud_compressor
     sudo docker-compose -f docker-compose-worker.yml up -d
+    sudo apt-get install nfs-common
+    mkdir /cloud_compressor/uploads
+    mkdir /cloud_compressor/compartido
+    sudo mount 10.10.10.10/uploads /cloud_compressor/uploads
+    sudo mount 10.10.10.10:/compartido /cloud_compressor/compartido
     echo "Nuevo"
     EOF
 
