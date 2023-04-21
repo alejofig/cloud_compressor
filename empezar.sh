@@ -58,8 +58,8 @@ sed -E "s#export CELERY_RESULT_BACKEND=redis://.*:6379/0#export CELERY_RESULT_BA
 sed -E "s#export CELERY_BROKER_URL=redis://.*:6379/0#export CELERY_BROKER_URL=redis://${redis_ip}:6379/0#" process_files.sh > process_files-temp.sh && mv  process_files-temp.sh process_files.sh
 
 
-sed -E "s#sudo mount [0-9\.]:/uploads /cloud_compressor/uploads#sudo mount ${nfs_ip}:/uploads /cloud_compressor/uploads" main.tf > main-temp.tf && mv main-temp.tf main.tf
-sed -E "s#sudo mount [0-9\.]:/conversions /cloud_compressor/conversions#sudo mount ${nfs_ip}:/conversions /cloud_compressor/conversions" main.tf > main-temp.tf && mv main-temp.tf main.tf
+sed -E "s#sudo mount [0-9\.]*:/uploads /cloud_compressor/uploads#sudo mount ${nfs_ip}:/uploads /cloud_compressor/uploads" main.tf > main-temp.tf && mv main-temp.tf main.tf
+sed -E "s#sudo mount [0-9\.]*:/conversions /cloud_compressor/conversions#sudo mount ${nfs_ip}:/conversions /cloud_compressor/conversions" main.tf > main-temp.tf && mv main-temp.tf main.tf
 
 
 
