@@ -49,7 +49,9 @@ resource "google_compute_instance" "nfs" {
     sudo mkdir /conversions
     sudo chmod 777 /uploads
     sudo chmod 777 /conversions
-    sudo sh -c "echo '/uploads *(rw,sync,no_subtree_check) /conversions *(rw,sync,no_subtree_check)' >> /etc/exports"
+    sudo sh -c "echo '/uploads *(rw,sync,no_subtree_check)' >> /etc/exports"
+    sudo sh -c "echo '/conversions *(rw,sync,no_subtree_check)'>> /etc/exports"
+    sudo exportfs -a 
     sudo systemctl restart nfs-kernel-server
   EOF
   tags                    = ["nfs"]

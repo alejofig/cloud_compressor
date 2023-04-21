@@ -146,3 +146,8 @@ resource "google_compute_instance" "worker" {
   }
 }
 ### WORKER
+
+
+### Nfs
+
+###
