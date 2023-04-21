@@ -49,17 +49,17 @@ sed -E "s#CELERY_RESULT_BACKEND: redis://.*:6379/0#CELERY_RESULT_BACKEND: redis:
 sed -E "s#CELERY_BROKER_URL: redis://.*:6379/0#CELERY_BROKER_URL: redis://${redis_ip}:6379/0#" docker-compose.yml > docker-compose-temp.yml && mv docker-compose-temp.yml docker-compose.yml
 
 
-sed -E "s#DATABASE_URL: postgresql://example:example@[0-9\.]*:5432/example#DATABASE_URL: postgresql://example:example@${database_id}:5432/example#" docker-compose-worker.yml > docker-compose-worker-temp.yml && mv docker-compose-worker-temp.yml docker-compose-worker.yml
+sed -E "#DATABASE_URL: postgresql://example:example@[0-9\.]*:5432/example#DATABASE_URL: postgresql://example:example@${database_id}:5432/example#" docker-compose-worker.yml > docker-compose-worker-temp.yml && mv docker-compose-worker-temp.yml docker-compose-worker.yml
 sed -E "s#CELERY_RESULT_BACKEND: redis://.*:6379/0#CELERY_RESULT_BACKEND: redis://${redis_ip}:6379/0#" docker-compose-worker.yml > docker-compose-worker-temp.yml && mv docker-compose-worker-temp.yml docker-compose-worker.yml
 sed -E "s#CELERY_BROKER_URL: redis://.*:6379/0#CELERY_BROKER_URL: redis://${redis_ip}:6379/0#" docker-compose-worker.yml > docker-compose-worker-temp.yml && mv docker-compose-worker-temp.yml docker-compose-worker.yml
 
-sed -E "s#export DATABASE_URL=postgresql://example:example@[0-9\.]*:5432/example#export DATABASE_URL=postgresql://example:example@${database_ip}:5432/example#" process_files.sh > process_files-temp.sh && mv  process_files-temp.sh process_files.sh
+sed -E "s#export DATABASE_URL=postgresql://example:example@.*:5432/example#export DATABASE_URL=postgresql://example:example@${database_ip}:5432/example#" process_files.sh > process_files-temp.sh && mv  process_files-temp.sh process_files.sh
 sed -E "s#export CELERY_RESULT_BACKEND=redis://.*:6379/0#export CELERY_RESULT_BACKEND=redis://${redis_ip}:6379/0#" process_files.sh > process_files-temp.sh && mv  process_files-temp.sh process_files.sh
 sed -E "s#export CELERY_BROKER_URL=redis://.*:6379/0#export CELERY_BROKER_URL=redis://${redis_ip}:6379/0#" process_files.sh > process_files-temp.sh && mv  process_files-temp.sh process_files.sh
 
 
-sed -E "s#sudo mount [0-9\.]*:/uploads /cloud_compressor/uploads#sudo mount ${nfs_ip}:/uploads /cloud_compressor/uploads" main.tf > main-temp.tf && mv main-temp.tf main.tf
-sed -E "s#sudo mount [0-9\.]*:/conversions /cloud_compressor/conversions#sudo mount ${nfs_ip}:/conversions /cloud_compressor/conversions" main.tf > main-temp.tf && mv main-temp.tf main.tf
+sed -E "s#sudo mount .*:/uploads /cloud_compressor/uploads#sudo mount ${nfs_ip}:/uploads /cloud_compressor/uploads#" main.tf > main-temp.tf && mv main-temp.tf main.tf
+sed -E "s#sudo mount .*:/conversions /cloud_compressor/conversions#sudo mount ${nfs_ip}:/conversions /cloud_compressor/conversions#" main.tf > main-temp.tf && mv main-temp.tf main.tf
 
 
 

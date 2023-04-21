@@ -51,7 +51,7 @@ resource "google_compute_instance" "web" {
     sudo apt-get install nfs-common
     mkdir /cloud_compressor/uploads
     mkdir /cloud_compressor/compartido
-    sudo mount 10.10.10.10:/uploads /cloud_compressor/uploads
+    sudo mount 34.29.53.187:/uploads /cloud_compressor/uploads
     sudo mount 10.10.10.10:/compartido /cloud_compressor/compartido
     echo "Nuevo"
     EOF
