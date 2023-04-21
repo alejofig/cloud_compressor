@@ -60,8 +60,8 @@ sed -E "s#export CELERY_BROKER_URL=redis://.*:6379/0#export CELERY_BROKER_URL=re
 
 
 #!/bin/bash
-sed -E "s#sudo mount .*:/uploads /cloud_compressor/uploads#sudo mount ${nfs_ip}:/uploads /cloud_compressor/uploads#" main.tf > main-temp.tf && mv main-temp.tf main.tf
-sed -E "s#sudo mount .*:/conversions /cloud_compressor/conversions#sudo mount ${nfs_ip}:/conversions /cloud_compressor/conversions#" main.tf > main-temp.tf && mv main-temp.tf main.tf
+sed -E "s#sudo mount -t nfs .*:/uploads /cloud_compressor/uploads#sudo mount ${nfs_ip}:/uploads /cloud_compressor/uploads#" main.tf > main-temp.tf && mv main-temp.tf main.tf
+sed -E "s#sudo mount -t nfs .*:/conversions /cloud_compressor/conversions#sudo mount ${nfs_ip}:/conversions /cloud_compressor/conversions#" main.tf > main-temp.tf && mv main-temp.tf main.tf
 
 
 git add .
