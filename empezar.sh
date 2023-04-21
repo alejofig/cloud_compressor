@@ -44,12 +44,12 @@ chmod u+rw docker-compose.yml
 chmod u+rw docker-compose-worker.yml
 chmod u+rw process_files.sh
 
-sed -E "s#DATABASE_URL: postgresql://example:example@[0-9\.]*:5432/example#DATABASE_URL: postgresql://example:example@${database_id}:5432/example#" docker-compose.yml > docker-compose-temp.yml && mv docker-compose-temp.yml docker-compose.yml
+sed -E "s#DATABASE_URL: postgresql://example:example@.*:5432/example#DATABASE_URL: postgresql://example:example@${database_id}:5432/example#" docker-compose.yml > docker-compose-temp.yml && mv docker-compose-temp.yml docker-compose.yml
 sed -E "s#CELERY_RESULT_BACKEND: redis://.*:6379/0#CELERY_RESULT_BACKEND: redis://${redis_ip}:6379/0#" docker-compose.yml > docker-compose-temp.yml && mv docker-compose-temp.yml docker-compose.yml
 sed -E "s#CELERY_BROKER_URL: redis://.*:6379/0#CELERY_BROKER_URL: redis://${redis_ip}:6379/0#" docker-compose.yml > docker-compose-temp.yml && mv docker-compose-temp.yml docker-compose.yml
 
 
-sed -E "#DATABASE_URL: postgresql://example:example@[0-9\.]*:5432/example#DATABASE_URL: postgresql://example:example@${database_id}:5432/example#" docker-compose-worker.yml > docker-compose-worker-temp.yml && mv docker-compose-worker-temp.yml docker-compose-worker.yml
+sed -E "s#DATABASE_URL: postgresql://example:example@.*:5432/example#DATABASE_URL: postgresql://example:example@${database_id}:5432/example#" docker-compose-worker.yml > docker-compose-worker-temp.yml && mv docker-compose-worker-temp.yml docker-compose-worker.yml
 sed -E "s#CELERY_RESULT_BACKEND: redis://.*:6379/0#CELERY_RESULT_BACKEND: redis://${redis_ip}:6379/0#" docker-compose-worker.yml > docker-compose-worker-temp.yml && mv docker-compose-worker-temp.yml docker-compose-worker.yml
 sed -E "s#CELERY_BROKER_URL: redis://.*:6379/0#CELERY_BROKER_URL: redis://${redis_ip}:6379/0#" docker-compose-worker.yml > docker-compose-worker-temp.yml && mv docker-compose-worker-temp.yml docker-compose-worker.yml
 

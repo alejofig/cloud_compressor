@@ -1,3 +1,3 @@
-sed -E "s#export DATABASE_URL=postgresql://example:example@.*:5432/example#export DATABASE_URL=postgresql://example:example@99.99.99.99:5432/example#" process_files.sh > process_files-temp.sh && mv  process_files-temp.sh process_files.sh
-sed -E "s#export CELERY_RESULT_BACKEND=redis://.*:6379/0#export CELERY_RESULT_BACKEND=redis://55.55.55.55:6379/0#" process_files.sh > process_files-temp.sh && mv  process_files-temp.sh process_files.sh
-sed -E "s#export CELERY_BROKER_URL=redis://.*:6379/0#export CELERY_BROKER_URL=redis://55.55.55.55:6379/0#" process_files.sh > process_files-temp.sh && mv  process_files-temp.sh process_files.sh
+sed -E "s#DATABASE_URL: postgresql://example:example@.*:5432/example#DATABASE_URL: postgresql://example:example@33.33.33.33:5432/example#" docker-compose-worker.yml > docker-compose-worker-temp.yml && mv docker-compose-worker-temp.yml docker-compose-worker.yml
+sed -E "s#CELERY_RESULT_BACKEND: redis://.*:6379/0#CELERY_RESULT_BACKEND: redis://10.10.10.10:6379/0#" docker-compose-worker.yml > docker-compose-worker-temp.yml && mv docker-compose-worker-temp.yml docker-compose-worker.yml
+sed -E "s#CELERY_BROKER_URL: redis://.*:6379/0#CELERY_BROKER_URL: redis://10.10.10.10:6379/0#" docker-compose-worker.yml > docker-compose-worker-temp.yml && mv docker-compose-worker-temp.yml docker-compose-worker.yml
