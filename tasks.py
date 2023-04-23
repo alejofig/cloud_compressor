@@ -89,7 +89,7 @@ def procesar_solicitud(id_solicitud):
     registro_conversion.estado = EstadoConversionArchivo.exitosa
     solicitud.estado = EstadoSolicitud.completada
     # Enviar un correo electrónico al usuario
-    enviar_correo_electronico(solicitud)
+    #enviar_correo_electronico(solicitud)
     solicitud.fecha_finalizacion = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')
     db.session.commit()
 
