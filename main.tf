@@ -51,8 +51,8 @@ resource "google_compute_instance" "web" {
     sudo apt-get -y install nfs-common
     sudo mkdir /cloud_compressor/uploads
     sudo mkdir /cloud_compressor/conversions
-    sudo mount 34.173.177.218:/uploads /cloud_compressor/uploads
-    sudo mount 34.173.177.218:/conversions /cloud_compressor/conversions
+    sudo mount 34.172.107.146:/uploads /cloud_compressor/uploads
+    sudo mount 34.172.107.146:/conversions /cloud_compressor/conversions
     echo "Nuevo"
     EOF
 }
@@ -131,8 +131,8 @@ resource "google_compute_instance" "worker" {
     sudo apt-get -y install nfs-common
     sudo mkdir /cloud_compressor/uploads
     sudo mkdir /cloud_compressor/conversions
-    sudo mount 34.173.177.218:/uploads /cloud_compressor/uploads
-    sudo mount 34.173.177.218:/conversions /cloud_compressor/conversions
+    sudo mount 34.172.107.146:/uploads /cloud_compressor/uploads
+    sudo mount 34.172.107.146:/conversions /cloud_compressor/conversions
     echo "Nuevo"
     EOF
 
