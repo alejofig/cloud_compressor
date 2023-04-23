@@ -1,8 +1,7 @@
 # Obtener el valor del output de Terraform y asignarlo a una variable
-database_id="34.27.0.35"
+database_id="35.188.149.5"
 
 
-cd ..
 cd redis
 
 terraform init
