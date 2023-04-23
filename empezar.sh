@@ -1,6 +1,7 @@
 # Obtener el valor del output de Terraform y asignarlo a una variable
 database_id="34.27.0.35"
 
+
 cd ..
 cd redis
 
