@@ -1,5 +1,5 @@
 #!/bin/bash
-export DATABASE_URL=postgresql://example:example@34.27.70.170:5432/example
+export DATABASE_URL=postgresql://postgres:example@34.27.70.170:5432/example
 export CELERY_RESULT_BACKEND=redis://34.30.176.163:6379/0
 export PUERTO_SMTP=587
 export CELERY_BROKER_URL=redis://34.30.176.163:6379/0
