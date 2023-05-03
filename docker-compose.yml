@@ -8,7 +8,7 @@ services:
     ports:
       - "8000:5000"
     environment:
-      DATABASE_URL: postgresql://postgres:example@35.184.246.200:5432/example
+      DATABASE_URL: postgresql://example:example@35.184.246.200:5432/example
       CELERY_RESULT_BACKEND: redis://104.154.208.42:6379/0
       PUERTO_SMTP: 587
       CELERY_BROKER_URL: redis://104.154.208.42:6379/0
