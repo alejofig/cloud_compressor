@@ -14,3 +14,4 @@ services:
       CELERY_BROKER_URL: redis://104.154.208.42:6379/0
       JWT_ALGORITHM: "HS256"
       JWT_SECRET_KEY: "frase-secreta"
+
