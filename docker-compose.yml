@@ -8,13 +8,9 @@ services:
     ports:
       - "8000:5000"
     environment:
-      DATABASE_URL: postgresql://postgres:example@35.188.149.5:5432/example
-      CELERY_RESULT_BACKEND: redis://34.133.233.28:6379/0
+      DATABASE_URL: postgresql://postgres:example@35.184.246.200:5432/example
+      CELERY_RESULT_BACKEND: redis://104.154.208.42:6379/0
       PUERTO_SMTP: 587
-      CELERY_BROKER_URL: redis://34.133.233.28:6379/0
-      CORREO_ELECTRONICO: "clouduniandesmiso@hotmail.com"
-      SERVIDOR_SMTP: "smtp-mail.outlook.com"
-      USUARIO_SMTP: "clouduniandesmiso@hotmail.com"
-      PASSWORD_SMTP: "12uniandes12"
+      CELERY_BROKER_URL: redis://104.154.208.42:6379/0
       JWT_ALGORITHM: "HS256"
       JWT_SECRET_KEY: "frase-secreta"

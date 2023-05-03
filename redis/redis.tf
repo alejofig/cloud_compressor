@@ -1,6 +1,6 @@
 # Configuración de proveedor para GCP
 provider "google" {
-  project = "337821398598"
+  project = "746411315164"
   region  = "us-central1"
 }
 data "google_compute_zones" "available" {}
