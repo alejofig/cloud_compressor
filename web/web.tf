@@ -46,11 +46,6 @@ resource "google_compute_instance_template" "web2" {
     git clone -b lb https://github.com/alejofig/cloud_compressor.git
     cd cloud_compressor
     sudo docker-compose up -d
-    sudo apt-get -y install nfs-common
-    sudo mkdir /cloud_compressor/uploads
-    sudo mkdir /cloud_compressor/conversions
-    sudo mount 34.172.107.146:/uploads /cloud_compressor/uploads
-    sudo mount 34.172.107.146:/conversions /cloud_compressor/conversions
     echo "Nuevo"
     EOF
 }
