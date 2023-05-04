@@ -17,8 +17,8 @@ resource "google_compute_network" "my-network6" {
 
 
 # Creación de instancia de máquina virtual "web"
-resource "google_compute_instance_template" "web2" {
-  name         = "web2"
+resource "google_compute_instance_template" "web3" {
+  name         = "web3"
   machine_type = "n1-standard-1"
   tags         = ["web"]
   disk {
@@ -55,8 +55,8 @@ resource "google_compute_address" "web" {
 }
 
 
-resource "google_compute_firewall" "allow-http-web2" {
-  name    = "allow-http-web2"
+resource "google_compute_firewall" "allow-http-web3" {
+  name    = "allow-http-web3"
   network = google_compute_network.my-network6.self_link
 
   allow {
@@ -65,11 +65,11 @@ resource "google_compute_firewall" "allow-http-web2" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = [tolist(google_compute_instance_template.web2.tags)[0]]
+  target_tags   = [tolist(google_compute_instance_template.web3.tags)[0]]
 }
 
-resource "google_compute_firewall" "allow-ssh-web2" {
-  name    = "allow-ssh-web2"
+resource "google_compute_firewall" "allow-ssh-web3" {
+  name    = "allow-ssh-web3"
   network = google_compute_network.my-network6.self_link
 
   allow {
@@ -78,7 +78,7 @@ resource "google_compute_firewall" "allow-ssh-web2" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = [tolist(google_compute_instance_template.web2.tags)[0]]
+  target_tags   = [tolist(google_compute_instance_template.web3.tags)[0]]
 
 
 }
@@ -92,7 +92,7 @@ resource "google_compute_instance_group_manager" "web" {
 name = "web-manager"
 zone = data.google_compute_zones.available.names[0]
 version {
-instance_template = google_compute_instance_template.web2.self_link
+instance_template = google_compute_instance_template.web3.self_link
 name = "primary"
 }
 target_pools = [google_compute_target_pool.web-pool2.self_link]
@@ -117,10 +117,9 @@ source = "GoogleCloudPlatform/lb/google"
 version = "2.2.0"
 region = "us-central1"
 name = "load-balancer"
-service_port = 8000
+service_port = 80
 target_tags = ["web-pool2"]
 network = google_compute_network.my-network6.self_link
-  ports = ["80"]
 }
 
 output "load_balancer_default_ip" {
