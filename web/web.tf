@@ -65,7 +65,7 @@ resource "google_compute_firewall" "allow-http-web2" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = [tolist(google_compute_instance_template.web2.tags)[0],"web-pool2"]
+  target_tags   = [tolist(google_compute_instance_template.web2.tags)[0]]
 }
 
 resource "google_compute_firewall" "allow-ssh-web2" {
@@ -78,7 +78,8 @@ resource "google_compute_firewall" "allow-ssh-web2" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = [tolist(google_compute_instance_template.web2.tags)[0],"web-pool2"]
+  target_tags   = [tolist(google_compute_instance_template.web2.tags)[0]]
+
 
 }
 
@@ -119,4 +120,10 @@ name = "load-balancer"
 service_port = 8000
 target_tags = ["web-pool2"]
 network = google_compute_network.my-network6.self_link
+  ports = ["80"]
+}
+
+output "load_balancer_default_ip" {
+  description = "The external ip address of the forwarding rule for default lb."
+  value       = module.lb.external_ip
 }
