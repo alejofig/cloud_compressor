@@ -5,8 +5,11 @@ from flask import jsonify, make_response
 from modelos.modelos import EstadoSolicitud,Archivo, EstadoConversion, RegistroConversion,Solicitud, EstadoConversionArchivo,db
 from datetime import datetime
 import uuid
+from google.cloud import storage
 
 def create_task(request,user_id):
+    # crear el cliente de gcp
+    client = storage.Client.from_service_account_json("credenciales_gcp.json")
     # Por implementar el envío de los archivos
     file_name = request.form.get('fileName',None)
     new_format = request.form.get('newFormat',None)
@@ -28,6 +31,12 @@ def create_task(request,user_id):
         # Guardar el archivo en la carpeta correspondiente
         final_path = os.path.join(path, f'{uuid_file}.{file_format}')
         file.save(final_path)
+        # Guardar el archivo dentro del bucket de cloudStorage
+        bucket = client.get_bucket('bucket-cloud-compressor')
+        blob = bucket.blob(final_path)
+        blob.upload_from_filename(final_path)
+
+
         fecha_subida = datetime.now()
         estado = EstadoConversion.uploaded
 

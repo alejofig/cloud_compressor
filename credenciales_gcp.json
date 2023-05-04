@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "cloud-compressor",
+  "private_key_id": "4de276d49ac6d2813fe32fded020ea53916b970f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCZholgum6ts2/F\n3xwpozrKTP03sAOQ9z1AXyyDOYA7C7TmC2qYngAuLHbP5yFQK5wtsh2F5Enlfjl2\n1GY5QNYM0+DLyS0vvTjXa7PcZDa2fKyeBOMSd3Xt2kbWvIgHIR4zOA/+qCI3DMwn\nOpr0n3y/YHD98xzQO0tlK1iqbJ7z0CWS269F+WgCXGLGkrQrcRQiU3jHoY1jmit6\nadDJvm7OYfd5t+0y2GabvRWUMDNgwK8F1CYr6U+YJLbIIBWZYp7WGCJ6kJMu1AnY\nH1dNvunH5jsxtfqadX8h9BLaLT5VEPybgY8whUe3pg/m0nXJXBlrAiiaVsBmF7QZ\n4YSxsd2TAgMBAAECggEAHSaqly9PLLRRmOTQWCeiVh9gRV6qjrAjdUGdFh2o9401\ngCjSyL/XkOzocnmUncBqG1Miv/WlAmqBRsr1zhE9k5n3qTo91j67uEu/Dy4IJYZu\n0GJlK3B7d/pmUQfjXFcxgNA4WUZbmNBZQ2mhWqmd6kjJq66p3fAkVMVyRInzdJ/Z\nvoODhSUOB/xIbs6JZCyEW0kj6l4vD3hVXcUb0vV+TvEiX2/R5OPXRB7SN+Ll5jdW\nyOBwnslnmlXV7z/gGS6CBnrInutczYQjTlzBOcUJDJi6DJ9NjOLiyLRIDUPLO/i4\nlJnwSSSP56mZ48lc26umWtATgulHKa2ncHT9KkfNAQKBgQDWUdtwBeWs+y/FK5IK\nF9mZNsCbOjOvy/3qPAGEc1Y23jEUVrOP/qngOMhBYIAw9LA31I7wGwOXdlDimgvZ\nOy21p/1Geuv79HZScTucq1iiDoxdRFD2DiPq7XjL/gDMBEUyOHzGylGFh7xuhQEC\n5oC8LrtWDaD13+UZwXpfwRpIYQKBgQC3YfkLzmyzmcPahI8aGRDYUmdZ5pY9bKsM\ns0nmoJq3uTvN+hMQ/WyRP9vD2mGiSTsSDiYoVvcylT+0JbsMXzkKprkzhMlMFJOE\nKrw9LK4keI2ngbu0j0WnYv5t6lSX2BRbmVwSpHotE1PVRxb4LCpm5RU8o/tISGHQ\nSIMr3fmacwKBgHabdJKJYPMbS/OVSkv1qQHGsE73pdUbUplHvhs77TGOQ6Ea3mLJ\nL+Ab7I9pxWfScpdjNfuhJ5qx6s+NKxN8Ua6fmmZf7qtQPg8gBTqOBQ4ieQHApgGW\nD8CazWgvWOePUXAanMsy+myoktqjFs0xHXuHbTuRbUvFLbfUQFIvvsjhAoGAANQI\nc+0ywHzpTYtbuhpy4Qc+QEGyXASpoR0OMGR5TmsfwgZnH6SFYQKQ04mg90KtaZ92\nvKfn5eqWpxGkjqG/eDTYkUsAPb+6CtbGkuAoyTFiMmd7mY0sG11vGL/+MdFgBinj\nKJJlmt6Demsfx28rodtXBTcYY3MwPeiV7xTJk9ECgYBbTvqpffTXFpaN9ZQGskwc\nfzznZtDj4KkXPnJb1FdQpM6I+P+gWXJZWiMT86AhhdYfjAZhaW/ZczddzatTNwBg\nhktSpPLYmPVos38AmuzM/JjxGHEe0GSHrjZU4Ar7WElsmHIZN2XeIAtKvUkRVZiU\n7pGdv44A2mW8qReUB4ly2g==\n-----END PRIVATE KEY-----\n",
+  "client_email": "app-cloud-compressor@cloud-compressor.iam.gserviceaccount.com",
+  "client_id": "104254025027751989317",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/app-cloud-compressor%40cloud-compressor.iam.gserviceaccount.com"
+}

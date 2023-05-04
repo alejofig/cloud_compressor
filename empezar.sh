@@ -26,20 +26,6 @@ done
 redis_ip=$(terraform output -raw redis_ip_address)
 cd ..
 
-cd nfs
-
-terraform init
-terraform apply -auto-approve
-
-# Esperar hasta que Terraform termine de aplicar los cambios
-while [ $(terraform plan -detailed-exitcode | grep -o "exit code [0-9]*" | grep -o "[0-9]*") -eq 2 ]; do
-  echo "Esperando a que Terraform termine de aplicar los cambios de nfs ..."
-  sleep 5
-done
-nfs_ip=$(terraform output -raw nfs_ip_address)
-cd ..
-
-
 chmod u+rw docker-compose.yml
 chmod u+rw docker-compose-worker.yml
 chmod u+rw process_files.sh
@@ -59,11 +45,6 @@ sed -E "s#export CELERY_BROKER_URL=redis://.*:6379/0#export CELERY_BROKER_URL=re
 
 
 
-#!/bin/bash
-sed -E "s#sudo mount -t nfs .*:/uploads /cloud_compressor/uploads#sudo mount ${nfs_ip}:/uploads /cloud_compressor/uploads#" main.tf > main-temp.tf && mv main-temp.tf main.tf
-sed -E "s#sudo mount -t nfs .*:/conversions /cloud_compressor/conversions#sudo mount ${nfs_ip}:/conversions /cloud_compressor/conversions#" main.tf > main-temp.tf && mv main-temp.tf main.tf
-
-
 git add .
 git commit -m "Actualización de variables de entorno con Terraform"
 git push
@@ -74,6 +55,8 @@ terraform apply -auto-approve
 while [ $(terraform plan -detailed-exitcode | grep -o "exit code [0-9]*" | grep -o "[0-9]*") -eq 2 ]; do
    echo "Esperando a que Terraform termine de aplicar los de web y worker..."
    sleep 5
+
+gcloud compute scp credenciales_gcp.json [web]:/cloud_compressor/
 
 
 

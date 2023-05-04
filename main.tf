@@ -45,14 +45,9 @@ resource "google_compute_instance" "web" {
     sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
     docker-compose --version
-    git clone -b gcp https://github.com/alejofig/cloud_compressor.git
+    git clone -b bucket_jcra https://github.com/alejofig/cloud_compressor.git
     cd cloud_compressor
     sudo docker-compose up -d
-    sudo apt-get -y install nfs-common
-    sudo mkdir /cloud_compressor/uploads
-    sudo mkdir /cloud_compressor/conversions
-    sudo mount 34.173.177.218:/uploads /cloud_compressor/uploads
-    sudo mount 34.173.177.218:/conversions /cloud_compressor/conversions
     echo "Nuevo"
     EOF
 }
@@ -125,14 +120,9 @@ resource "google_compute_instance" "worker" {
     sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
     docker-compose --version
-    git clone -b gcp https://github.com/alejofig/cloud_compressor.git
+    git clone -b bucket_jcra https://github.com/alejofig/cloud_compressor.git
     cd cloud_compressor
     sudo docker-compose -f docker-compose-worker.yml up -d
-    sudo apt-get -y install nfs-common
-    sudo mkdir /cloud_compressor/uploads
-    sudo mkdir /cloud_compressor/conversions
-    sudo mount 34.173.177.218:/uploads /cloud_compressor/uploads
-    sudo mount 34.173.177.218:/conversions /cloud_compressor/conversions
     echo "Nuevo"
     EOF
 
