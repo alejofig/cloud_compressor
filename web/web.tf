@@ -1,35 +1,44 @@
-# Configuración de proveedor para juanca
 provider "google" {
-  project = "746411315164"
-  region  = "us-central1"
+project = "746411315164"
+region = "us-central1"
 }
-data "google_compute_zones" "available" {}
 
-# Usa la zona por defecto "us-central1-a"
-locals {
-  zone = data.google_compute_zones.available.names[0]
-}
-# Creación de red
 resource "google_compute_network" "my-network6" {
   name                    = "my-network6"
   auto_create_subnetworks = true
 }
 
+resource "google_compute_autoscaler" "foobar" {
+name = "my-autoscaler"
+zone = "us-central1-c"
+target = google_compute_instance_group_manager.foobar.self_link
 
-# Creación de instancia de máquina virtual "web"
-resource "google_compute_instance_template" "web3" {
-  name         = "web3"
-  machine_type = "n1-standard-1"
-  tags         = ["web"]
+autoscaling_policy {
+max_replicas = 3
+min_replicas = 1
+cooldown_period = 60
+
+cpu_utilization {
+target = 0.9
+}
+}
+}
+
+resource "google_compute_instance_template" "foobar" {
+name = "my-instance-template"
+machine_type = "n1-standard-1"
+can_ip_forward = false
+tags = ["web"]
+
   disk {
       source_image = "debian-cloud/debian-11"
     
   }
-  # Conexión a la red
+
   network_interface {
-    network = google_compute_network.my-network6.self_link
+  network = google_compute_network.my-network6.self_link
     access_config {
-      nat_ip = google_compute_address.web.address
+      // Ephemeral public IP
     }
   }
 
@@ -50,9 +59,49 @@ resource "google_compute_instance_template" "web3" {
     EOF
 }
 
-resource "google_compute_address" "web" {
-  name = "web-ip"
+resource "google_compute_target_pool" "foobar" {
+name = "my-target-pool"
+region = "us-central1"
 }
+
+resource "google_compute_instance_group_manager" "foobar" {
+name = "my-igm"
+zone = "us-central1-c"
+version {
+instance_template = google_compute_instance_template.foobar.self_link
+name = "primary"
+}
+target_pools = [google_compute_target_pool.foobar.self_link]
+base_instance_name = "terraform"
+}
+
+
+module "lb" {
+    source = "GoogleCloudPlatform/lb/google"
+    version = "2.2.0"
+    region = "us-central1"
+    name = "load-balancer"
+    service_port = 80
+    target_tags = ["my-target-pool"]
+    network = google_compute_network.my-network6.self_link
+}
+output "load_balancer_default_ip" {
+  description = "The external ip address of the forwarding rule for default lb."
+  value       = module.lb.external_ip
+}
+
+  resource "google_compute_firewall" "ssh" {
+    name    = "allow-ssh"
+    network = google_compute_network.my-network6.self_link
+
+    allow {
+      protocol = "tcp"
+      ports    = ["22"]
+    }
+    target_tags   = ["web"]
+
+    source_ranges = ["0.0.0.0/0"]
+  }
 
 
 resource "google_compute_firewall" "allow-http-web3" {
@@ -63,66 +112,26 @@ resource "google_compute_firewall" "allow-http-web3" {
     protocol = "tcp"
     ports    = ["80", "8080", "8000", "5000"]
   }
+  target_tags   = ["web"]
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = [tolist(google_compute_instance_template.web3.tags)[0]]
 }
 
-resource "google_compute_firewall" "allow-ssh-web3" {
-  name    = "allow-ssh-web3"
+
+resource "google_compute_firewall" "allow-all-outbound" {
+  name    = "allow-all-outbound"
   network = google_compute_network.my-network6.self_link
 
   allow {
     protocol = "tcp"
-    ports    = ["22"]
+    ports    = ["0-65535"]
+  }
+
+  allow {
+    protocol = "udp"
+    ports    = ["0-65535"]
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = [tolist(google_compute_instance_template.web3.tags)[0]]
-
-
-}
-
-resource "google_compute_target_pool" "web-pool2" {
-name = "web-pool2"
-region = "us-central1"
-}
-
-resource "google_compute_instance_group_manager" "web" {
-name = "web-manager"
-zone = data.google_compute_zones.available.names[0]
-version {
-instance_template = google_compute_instance_template.web3.self_link
-name = "primary"
-}
-target_pools = [google_compute_target_pool.web-pool2.self_link]
-base_instance_name = "web"
-}
-
-resource "google_compute_autoscaler" "web_autoscaler" {
-  name                    = "web-autoscaler"
-  target                  = google_compute_instance_group_manager.web.self_link
-  zone                    = local.zone
-  autoscaling_policy {
-    min_replicas        = 1
-    max_replicas        = 3
-    cpu_utilization {
-      target = 0.6
-    }
-  }
-}
-
-module "lb" {
-source = "GoogleCloudPlatform/lb/google"
-version = "2.2.0"
-region = "us-central1"
-name = "load-balancer"
-service_port = 80
-target_tags = ["web-pool2"]
-network = google_compute_network.my-network6.self_link
-}
-
-output "load_balancer_default_ip" {
-  description = "The external ip address of the forwarding rule for default lb."
-  value       = module.lb.external_ip
+  target_tags   = ["web"]
 }
