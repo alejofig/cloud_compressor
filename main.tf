@@ -46,7 +46,7 @@ resource "google_compute_instance" "web" {
     sudo chmod +x /usr/local/bin/docker-compose
     docker-compose --version 
     git clone -b bucket_jcra https://github.com/alejofig/cloud_compressor.git
-    chmod -R 777 /cloud_compressor
+    sudo chmod -R 777 /cloud_compressor
     cd cloud_compressor
     sudo docker-compose up -d
     echo "Nuevo"
@@ -122,7 +122,7 @@ resource "google_compute_instance" "worker" {
     sudo chmod +x /usr/local/bin/docker-compose
     docker-compose --version
     git clone -b bucket_jcra https://github.com/alejofig/cloud_compressor.git
-    chmod -R 777 /cloud_compressor
+    sudo chmod -R 777 /cloud_compressor
     cd cloud_compressor
     sudo docker-compose -f docker-compose-worker.yml up -d
     echo "Nuevo"
