@@ -9,7 +9,7 @@ from google.cloud import storage
 
 def create_task(request,user_id):
     # crear el cliente de gcp
-    client = storage.Client.from_service_account_json("credenciales_gcp.json")
+    client = storage.Client.from_service_account_json("keys_gcp.json")
     # Por implementar el envío de los archivos
     file_name = request.form.get('fileName',None)
     new_format = request.form.get('newFormat',None)

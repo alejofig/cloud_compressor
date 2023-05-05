@@ -56,4 +56,4 @@ while [ $(terraform plan -detailed-exitcode | grep -o "exit code [0-9]*" | grep 
    echo "Esperando a que Terraform termine de aplicar los de web y worker..."
    sleep 5
 
-gcloud compute scp credenciales_gcp.json web:/cloud_compressor/credenciales_gcp.json --zone=us-central1-a
+gcloud compute scp keys_gcp.json web:/cloud_compressor/keys_gcp.json --zone=us-central1-a
