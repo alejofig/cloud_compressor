@@ -44,8 +44,9 @@ resource "google_compute_instance" "web" {
     sudo apt-get install -y docker.io
     sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
-    docker-compose --version
+    docker-compose --version 
     git clone -b bucket_jcra https://github.com/alejofig/cloud_compressor.git
+    chmod -R 777 /cloud_compressor
     cd cloud_compressor
     sudo docker-compose up -d
     echo "Nuevo"
@@ -121,6 +122,7 @@ resource "google_compute_instance" "worker" {
     sudo chmod +x /usr/local/bin/docker-compose
     docker-compose --version
     git clone -b bucket_jcra https://github.com/alejofig/cloud_compressor.git
+    chmod -R 777 /cloud_compressor
     cd cloud_compressor
     sudo docker-compose -f docker-compose-worker.yml up -d
     echo "Nuevo"
