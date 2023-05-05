@@ -61,6 +61,7 @@ def procesar_solicitud(id_solicitud):
 
     # Guardar el archivo para que sea visible en task
     blob = bucket.blob(nombre_archivo)
+    os.makedirs(os.path.dirname(nombre_archivo), exist_ok=True)
     blob.download_to_filename(nombre_archivo)
 
     if archivo.formato_origen == TipoCompresion.zip.value:
