@@ -10,6 +10,7 @@ from celery import Celery
 from app import app
 from celery.signals import task_postrun
 from celery.signals import worker_process_init
+from google.cloud import storage
 
 @worker_process_init.connect
 def prep_db_pool(**kwargs):
@@ -32,6 +33,10 @@ celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://lo
 
 @celery.task()
 def procesar_solicitud(id_solicitud):
+    # crear el cliente de gcp
+    client = storage.Client.from_service_account_json("keys_gcp.json")
+    bucket = client.get_bucket('bucket-cloud-compressor')
+
     print(f"Procesando la solicitud {id_solicitud}")
     solicitud = Solicitud.query.filter_by(id=id_solicitud).first()
     solicitud.estado = EstadoSolicitud.en_progreso
@@ -43,14 +48,21 @@ def procesar_solicitud(id_solicitud):
     # Comprobar si el archivo ya ha sido procesado
     if archivo.estado == EstadoConversion.processed:
         return
+    
 
     date_str = datetime.now().strftime("%Y-%m-%d")
 
     path = os.path.join(os.getcwd(), 'conversions', date_str)
     os.makedirs(path, exist_ok=True)
+
     # Guardar el archivo en la carpeta correspondiente
     nombre_archivo =  archivo.url_original
     archivo.url_modificado = os.path.join(path,f'{archivo.id}_{datetime.now().strftime("%Y%m%d_%H%M%S")}.{archivo.formato_destino}')
+
+    # Guardar el archivo para que sea visible en task
+    blob = bucket.blob(nombre_archivo)
+    blob.download_to_filename(nombre_archivo)
+
     if archivo.formato_origen == TipoCompresion.zip.value:
         comando = f'unzip {nombre_archivo}'
     elif archivo.formato_origen == TipoCompresion.seven_z.value:
@@ -84,6 +96,10 @@ def procesar_solicitud(id_solicitud):
         raise ValueError('El formato de archivo de destino no es válido')
 
     subprocess.call(comando, shell=True)
+    # Guardar el archivo en el bucket
+    blob = bucket.blob(archivo.url_modificado)
+    blob.upload_from_filename(archivo.url_modificado)
+    
     # Actualizar el estado del archivo y la solicitud
     archivo.estado = EstadoConversion.processed
     registro_conversion.estado = EstadoConversionArchivo.exitosa
