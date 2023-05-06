@@ -1,6 +1,6 @@
 # Configuración de proveedor para juanca
 provider "google" {
-  project = "725763982877"
+  project = "746411315164"
   region  = "us-central1"
 }
 data "google_compute_zones" "available" {}
@@ -32,7 +32,7 @@ resource "google_compute_firewall" "allow-http-web" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = [tolist(google_compute_instance.web.tags)[0], tolist(google_compute_instance.worker.tags)[0]]
+  target_tags   = [tolist(google_compute_instance.worker.tags)[0]]
 }
 
 resource "google_compute_firewall" "allow-ssh-web" {
@@ -45,13 +45,8 @@ resource "google_compute_firewall" "allow-ssh-web" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = [tolist(google_compute_instance.web.tags)[0], tolist(google_compute_instance.worker.tags)[0]]
+  target_tags   =[tolist(google_compute_instance.worker.tags)[0]]
 
-}
-
-
-output "web_ip_address" {
-  value = google_compute_instance.web.network_interface.0.access_config.0.nat_ip
 }
 
 

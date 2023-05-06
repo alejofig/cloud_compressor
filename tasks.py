@@ -11,6 +11,8 @@ from app import app
 from celery.signals import task_postrun
 from celery.signals import worker_process_init
 from google.cloud import storage
+from google.auth import compute_engine
+
 
 @worker_process_init.connect
 def prep_db_pool(**kwargs):
@@ -34,7 +36,8 @@ celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://lo
 @celery.task()
 def procesar_solicitud(id_solicitud):
     # crear el cliente de gcp
-    client = storage.Client()
+    credentials = compute_engine.Credentials()
+    client = storage.Client(credentials=credentials, project="746411315164")
     bucket = client.get_bucket('bucket-cloud-compressor-alejo')
 
     print(f"Procesando la solicitud {id_solicitud}")

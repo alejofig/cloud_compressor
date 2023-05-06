@@ -1,11 +1,13 @@
 from flask import send_file
 from modelos.modelos import Archivo
 from google.cloud import storage
+from google.auth import compute_engine
 import os
 
 def enviar_archivo(request,user_id,filename):
     # crear el cliente de gcp
-    client = storage.Client()
+    credentials = compute_engine.Credentials()
+    client = storage.Client(credentials=credentials, project="746411315164")
     bucket = client.get_bucket('bucket-cloud-compressor-alejo')
 
     ext=filename.split(".")[1]

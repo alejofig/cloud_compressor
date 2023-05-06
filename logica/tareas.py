@@ -6,10 +6,13 @@ from modelos.modelos import EstadoSolicitud,Archivo, EstadoConversion, RegistroC
 from datetime import datetime
 import uuid
 from google.cloud import storage
+from google.auth import compute_engine
 
 def create_task(request,user_id):
     # crear el cliente de gcp
-    client = storage.Client()
+    credentials = compute_engine.Credentials()
+    client = storage.Client(credentials=credentials, project="746411315164")
+
     # Por implementar el envío de los archivos
     file_name = request.form.get('fileName',None)
     new_format = request.form.get('newFormat',None)
