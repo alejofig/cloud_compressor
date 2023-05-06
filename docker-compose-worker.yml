@@ -5,7 +5,7 @@ services:
       build: .
       command: celery --app=tasks.celery worker --loglevel=info
       environment:
-        DATABASE_URL: postgresql://example:example@34.71.237.78:5432/example
+        DATABASE_URL: postgresql://postgres:example@34.71.237.78:5432/example
         CELERY_RESULT_BACKEND: redis://35.226.66.8:6379/0
         PUERTO_SMTP: 587
         CELERY_BROKER_URL: redis://35.226.66.8:6379/0
