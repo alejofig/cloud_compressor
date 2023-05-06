@@ -16,47 +16,6 @@ resource "google_compute_network" "my-network" {
 }
 
 
-# Creación de instancia de máquina virtual "web"
-resource "google_compute_instance" "web" {
-  name         = "web"
-  machine_type = "n1-standard-1"
-  zone         = local.zone
-  tags         = ["web"]
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
-  # Conexión a la red
-  network_interface {
-    network = google_compute_network.my-network.self_link
-    access_config {
-      nat_ip = google_compute_address.web.address
-    }
-  }
-
-  metadata_startup_script = <<-EOF
-    #!/bin/bash
-    echo "empezando el script"
-    sudo apt-get update
-    sudo apt-get -y install git cron p7zip-full
-    sudo apt-get install -y python3-pip
-    sudo apt-get install -y docker.io
-    sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
-    sudo chmod +x /usr/local/bin/docker-compose
-    docker-compose --version 
-    git clone -b bucket_jcra https://github.com/alejofig/cloud_compressor.git
-    sudo chmod -R 777 /cloud_compressor
-    cd cloud_compressor
-    sudo docker-compose up -d
-    echo "Nuevo"
-    EOF
-}
-
-resource "google_compute_address" "web" {
-  name = "web-ip"
-}
-
 resource "google_compute_address" "worker" {
   name = "worker-ip"
 }
