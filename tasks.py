@@ -34,8 +34,8 @@ celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://lo
 @celery.task()
 def procesar_solicitud(id_solicitud):
     # crear el cliente de gcp
-    client = storage.Client.from_service_account_json("keys_gcp.json")
-    bucket = client.get_bucket('bucket-cloud-compressor')
+    client = storage.Client()
+    bucket = client.get_bucket('bucket-cloud-compressor-alejo')
 
     print(f"Procesando la solicitud {id_solicitud}")
     solicitud = Solicitud.query.filter_by(id=id_solicitud).first()

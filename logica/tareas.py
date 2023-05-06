@@ -9,7 +9,7 @@ from google.cloud import storage
 
 def create_task(request,user_id):
     # crear el cliente de gcp
-    client = storage.Client.from_service_account_json("keys_gcp.json")
+    client = storage.Client()
     # Por implementar el envío de los archivos
     file_name = request.form.get('fileName',None)
     new_format = request.form.get('newFormat',None)
@@ -32,7 +32,7 @@ def create_task(request,user_id):
         final_path = os.path.join(path, f'{uuid_file}.{file_format}')
         file.save(final_path)
         # Guardar el archivo dentro del bucket de cloudStorage
-        bucket = client.get_bucket('bucket-cloud-compressor')
+        bucket = client.get_bucket('bucket-cloud-compressor-alejo')
         blob = bucket.blob(final_path)
         blob.upload_from_filename(final_path)
 

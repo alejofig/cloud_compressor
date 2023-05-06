@@ -5,8 +5,8 @@ import os
 
 def enviar_archivo(request,user_id,filename):
     # crear el cliente de gcp
-    client = storage.Client.from_service_account_json("keys_gcp.json")
-    bucket = client.get_bucket('bucket-cloud-compressor')
+    client = storage.Client()
+    bucket = client.get_bucket('bucket-cloud-compressor-alejo')
 
     ext=filename.split(".")[1]
     name = filename.split(".")[0]
