@@ -41,7 +41,10 @@ tags = ["web"]
       // Ephemeral public IP
     }
   }
-
+  service_account {
+    email  = "default"
+    scopes = ["https://www.googleapis.com/auth/devstorage.full_control"]
+  }
   metadata_startup_script = <<-EOF
     #!/bin/bash
     echo "empezando el script"

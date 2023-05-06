@@ -109,7 +109,7 @@ def procesar_solicitud(id_solicitud):
     registro_conversion.estado = EstadoConversionArchivo.exitosa
     solicitud.estado = EstadoSolicitud.completada
     # Enviar un correo electrónico al usuario
-    enviar_correo_electronico(solicitud)
+    #enviar_correo_electronico(solicitud)
     solicitud.fecha_finalizacion = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')
     db.session.commit()
 
@@ -117,22 +117,4 @@ def procesar_solicitud(id_solicitud):
 def close_session(*args,**kwargs):
     db.session.remove()
     return
-
-
-def enviar_correo_electronico(solicitud):
-    archivo = solicitud.archivo
-    destinatario = archivo.usuario.correo_electronico
-    print(f"Enviando Correo para solicitud {solicitud.id}")
-    cuerpo = f'Su solicitud con id {solicitud.id} ha sido procesada con estado {solicitud.estado.value}. Para más información consulte la dirección /api/tasks/{solicitud.id}. El archivo con nombre {solicitud.archivo.nombre} ahora tiene el formato {solicitud.archivo.formato_destino}.'
-    mensaje = MIMEText(cuerpo)
-    mensaje['Subject'] = 'Archivo convertido'
-    mensaje['From'] = os.environ.get('CORREO_ELECTRONICO')
-    mensaje['To'] = destinatario
-
-    servidor_smtp = smtplib.SMTP(os.environ.get('SERVIDOR_SMTP'), 587)
-    servidor_smtp.connect(os.environ.get('SERVIDOR_SMTP'), 587)
-    servidor_smtp.starttls()
-    servidor_smtp.login(os.environ.get('USUARIO_SMTP'), os.environ.get('PASSWORD_SMTP'))
-    servidor_smtp.sendmail(os.environ.get('CORREO_ELECTRONICO'), destinatario, mensaje.as_string())
-    servidor_smtp.quit()
 

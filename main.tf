@@ -64,7 +64,10 @@ resource "google_compute_instance" "worker" {
       image = "debian-cloud/debian-11"
     }
   }
-
+  service_account {
+    email  = "default"
+    scopes = ["https://www.googleapis.com/auth/devstorage.full_control"]
+  }
   metadata_startup_script = <<-EOF
     #!/bin/bash
     echo "empezando el script"
