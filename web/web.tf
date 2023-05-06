@@ -19,7 +19,7 @@ autoscaling_policy {
   cooldown_period = 60
 
   cpu_utilization {
-  target = 0.6
+  target = 0.3
   }
 }
 }

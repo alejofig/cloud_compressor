@@ -82,7 +82,6 @@ resource "google_compute_instance" "worker" {
     sudo chmod -R 777 /cloud_compressor
     cd cloud_compressor
     sudo docker-compose -f docker-compose-worker.yml up -d
-    echo "Nuevo"
     EOF
 
 

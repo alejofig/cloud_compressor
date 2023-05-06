@@ -13,6 +13,11 @@ def is_valid(api_key):
     if api_key == os.getenv("API_KEY"):
         return True
 
+
+class HealthCheck(Resource):
+    def get(self):
+        return "Todo melo", 200
+
 class VistaTasks(Resource):
 
     @jwt_required()

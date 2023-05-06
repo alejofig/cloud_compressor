@@ -1,7 +1,7 @@
 from email.mime.text import MIMEText
 import smtplib
 from flask_restful import Api
-from vistas import VistaLogIn, VistaSignIn, VistaTasks, VistaTask,VistaFiles
+from vistas import VistaLogIn, VistaSignIn, VistaTasks, VistaTask,VistaFiles,HealthCheck
 import serverless_wsgi
 from modelos.modelos import EstadoSolicitud, Solicitud, db, Archivo,EstadoConversion
 from flask_jwt_extended import JWTManager
@@ -37,6 +37,7 @@ db.init_app(app)
 db.create_all()
 jwt = JWTManager(app)
 api = Api(app)
+api.add_resource(HealthCheck, '/')
 api.add_resource(VistaSignIn, '/api/auth/signup')
 api.add_resource(VistaLogIn, '/api/auth/login')
 api.add_resource(VistaTasks, '/api/tasks')
