@@ -6,7 +6,7 @@ services:
     restart: always
     command: sh -c "service cron start && gunicorn --bind 0.0.0.0:5000 --log-level debug --timeout 90 --workers 4 app:app"
     ports:
-      - "8000:5000"
+      - "80:5000"
     environment:
       DATABASE_URL: postgresql://postgres:example@34.71.237.78:5432/example
       CELERY_RESULT_BACKEND: redis://35.226.66.8:6379/0
