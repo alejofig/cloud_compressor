@@ -1,5 +1,6 @@
 
 import os
+import shutil
 from flask import jsonify, make_response
 
 from modelos.modelos import EstadoSolicitud,Archivo, EstadoConversion, RegistroConversion,Solicitud, EstadoConversionArchivo,db
@@ -38,7 +39,7 @@ def create_task(request,user_id):
         bucket = client.get_bucket('bucket-cloud-compressor-alejo')
         blob = bucket.blob(final_path)
         blob.upload_from_filename(final_path)
-
+        shutil.rmtree(final_path)
 
         fecha_subida = datetime.now()
         estado = EstadoConversion.uploaded
