@@ -60,7 +60,8 @@ def procesar_solicitud(id_solicitud):
 
     # Guardar el archivo en la carpeta correspondiente
     nombre_archivo =  archivo.url_original
-    archivo.url_modificado = os.path.join(path,f'{archivo.id}_{datetime.now().strftime("%Y%m%d_%H%M%S")}.{archivo.formato_destino}')
+    path_final = os.path.join(path,f'{archivo.id}_{datetime.now().strftime("%Y%m%d_%H%M%S")}.{archivo.formato_destino}')
+    archivo.url_modificado = path_final
 
     # Guardar el archivo para que sea visible en task
     blob = bucket.blob(nombre_archivo)
@@ -103,7 +104,7 @@ def procesar_solicitud(id_solicitud):
     # Guardar el archivo en el bucket
     blob = bucket.blob(archivo.url_modificado)
     blob.upload_from_filename(archivo.url_modificado)
-    shutil.rmtree(path)
+    os.remove(path_final)
     # Actualizar el estado del archivo y la solicitud
     archivo.estado = EstadoConversion.processed
     registro_conversion.estado = EstadoConversionArchivo.exitosa
