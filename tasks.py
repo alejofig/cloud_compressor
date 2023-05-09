@@ -1,9 +1,11 @@
 from datetime import datetime
+import json
 import os
 import shutil
 import subprocess
 import smtplib
 from email.mime.text import MIMEText
+import time
 from modelos.modelos import Archivo,EstadoConversion, EstadoConversionArchivo, EstadoSolicitud, Solicitud, TipoCompresion,db
 import boto3
 from celery import Celery
@@ -12,8 +14,11 @@ from celery.signals import task_postrun
 from celery.signals import worker_process_init
 from google.cloud import storage
 from google.auth import compute_engine
+from google.cloud import pubsub_v1
+from concurrent import futures
 
-
+project_id = '746411315164'
+topic_name = 'cloud-miso'
 @worker_process_init.connect
 def prep_db_pool(**kwargs):
     """
@@ -29,19 +34,25 @@ def prep_db_pool(**kwargs):
     with app.app_context():
         db.engine.dispose()
 
+
 celery = Celery(__name__)
 celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
 celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379")
 
+
 @celery.task()
 def procesar_solicitud(id_solicitud):
     # crear el cliente de gcp
-    credentials = compute_engine.Credentials()
-    client = storage.Client(credentials=credentials, project="746411315164")
+    # credentials = compute_engine.Credentials()
+    # client = storage.Client(credentials=credentials, project="746411315164")
+    client = storage.Client()
     bucket = client.get_bucket('bucket-cloud-compressor-alejo')
 
     print(f"Procesando la solicitud {id_solicitud}")
     solicitud = Solicitud.query.filter_by(id=id_solicitud).first()
+    if not solicitud:
+        print(f"La solicitud con id {id_solicitud}, no existe en la bd.")
+        return
     solicitud.estado = EstadoSolicitud.en_progreso
     solicitud.fecha_inicio = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')
     db.session.commit()
@@ -119,3 +130,21 @@ def close_session(*args,**kwargs):
     db.session.remove()
     return
 
+
+def pubsub_callback(message):
+    procesar_solicitud.delay(json.loads(message.data.decode('utf-8'))["id"])
+    message.ack()
+
+
+
+subscriber = pubsub_v1.SubscriberClient()
+subscription_path = subscriber.subscription_path("746411315164", 'cloud-miso-sub')
+
+# subscriber.subscribe(subscription_path, callback=pubsub_callback)
+future = subscriber.subscribe(subscription_path, callback=pubsub_callback)
+with subscriber:
+    try:
+        future.result(timeout=60)
+    except futures.TimeoutError:
+        future.cancel()  # Trigger the shutdown.
+        future.result()  # Block until the shutdown is complete.

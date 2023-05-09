@@ -23,6 +23,7 @@ class EstadoSolicitud(enum.Enum):
     pendiente = 'pendiente'
     en_progreso = 'en progreso'
     completada = 'completada'
+    queue = 'queue'
 
 
 class EstadoConversionArchivo(enum.Enum):
@@ -76,6 +77,7 @@ class Solicitud(db.Model):
     estado = db.Column(db.Enum(EstadoSolicitud), nullable=False)
     fecha_inicio = db.Column(DateTime, nullable=True)
     fecha_finalizacion = db.Column(DateTime, nullable=True)
+    fecha_cola = db.Column(DateTime, nullable=True)
     id_archivo = db.Column(db.Integer, ForeignKey(
         'archivos.id'), nullable=False)
     id_usuario = db.Column(db.Integer, ForeignKey(

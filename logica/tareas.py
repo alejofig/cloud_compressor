@@ -11,9 +11,10 @@ from google.auth import compute_engine
 
 def create_task(request,user_id):
     # crear el cliente de gcp
-    credentials = compute_engine.Credentials()
-    client = storage.Client(credentials=credentials, project="746411315164")
-
+    
+    # credentials = compute_engine.Credentials()
+    # client = storage.Client(credentials=credentials, project="746411315164")
+    client = storage.Client()
     # Por implementar el envío de los archivos
     file_name = request.form.get('fileName',None)
     new_format = request.form.get('newFormat',None)
@@ -101,6 +102,7 @@ def get_tasks(request,user_id):
                 'fecha_creacion': solicitud.fecha_creacion.isoformat(),
                 'fecha_inicio': solicitud.fecha_inicio.isoformat() if solicitud.fecha_inicio else "",
                 'fecha_finalizacion': solicitud.fecha_finalizacion.isoformat() if solicitud.fecha_finalizacion else "",
+                'fecha_cola': solicitud.fecha_cola.isoformat() if solicitud.fecha_finalizacion else "",
                 'registro_conversion': {
                     'id': registro_conversion.id,
                     'estado': registro_conversion.estado.value,

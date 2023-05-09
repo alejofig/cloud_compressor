@@ -11,3 +11,4 @@ terraform.*
 venv
 cloudmiso.json
 credenciales_gcp.json
+/config

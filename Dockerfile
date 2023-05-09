@@ -25,6 +25,9 @@ RUN export FLASK_APP=app.py
 
 RUN crontab -l | { cat; echo "*/1 * * * * /usr/bin/flock -n /tmp/process_files.lockfile.$RANDOM /bin/bash /app/process_files.sh >> /var/log/cron.log 2>&1"; } | crontab -
 
+COPY config/creds.json /app/config/creds.json
+
+
 # Exponemos el puerto que utilizará Flask
 EXPOSE 5000
 

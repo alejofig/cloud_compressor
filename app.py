@@ -8,6 +8,9 @@ from flask_jwt_extended import JWTManager
 from flask import Flask,current_app
 from dotenv import load_dotenv
 import os
+import json
+from datetime import datetime
+from google.cloud import pubsub_v1
 
 def create_app(config_name):
     application = Flask(__name__)
@@ -20,7 +23,6 @@ def create_app(config_name):
 app = create_app('default')
 
 
-app.config['CELERY_BROKER_URL'] = os.environ.get('CELERY_BROKER_URL')
 app.config['DIRECTORIO_SALIDA'] = '/tmp'
 app.config['CORREO_ELECTRONICO'] = os.environ.get('CORREO_ELECTRONICO')
 app.config['SERVIDOR_SMTP'] = os.environ.get('SERVIDOR_SMTP')
@@ -46,12 +48,21 @@ api.add_resource(VistaFiles, '/api/files/<filename>')
 
 @app.cli.command()
 def procesar():
+    publisher = pubsub_v1.PublisherClient()
+    topic_path = publisher.topic_path("746411315164", "cloud-miso")
     """Run jobs"""
-    from tasks import procesar_solicitud
     solicitudes_pendientes = Solicitud.query.filter_by(estado=EstadoSolicitud.pendiente).all()
-    print("Enviando solicitudes: ", solicitudes_pendientes)
     for solicitud in solicitudes_pendientes:
-        procesar_solicitud.delay(solicitud.id)
+        message = json.dumps({'id': solicitud.id}).encode('utf-8')
+        publisher.publish(topic_path, data=message)
+        solicitud.estado = EstadoSolicitud.queue
+        
+        response = publisher.publish(topic_path, data=message)
+        message_id = response.result()
+        solicitud.fecha_cola = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')
+        print(f"Published message with ID: {message_id}, solicitud {solicitud.id}")
+        db.session.add(solicitud)
+        db.session.commit()
         
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5001)
