@@ -1,5 +1,5 @@
 provider "google" {
-  project = "725763982877"
+  project = "746411315164"
   region  = "us-central1"
 }
 
@@ -56,7 +56,7 @@ resource "google_compute_instance" "database" {
     sudo service postgresql restart
 
     # Crea un usuario y una base de datos de ejemplo en PostgreSQL
-    sudo -u postgres psql -c "CREATE USER example WITH PASSWORD 'example';"
+    sudo -u postgres psql -c "CREATE USER postgres WITH PASSWORD 'example';"
     sudo -u postgres psql -c "CREATE DATABASE example OWNER example;"
   EOF
 }

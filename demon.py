@@ -7,7 +7,7 @@ def pubsub_callback(message):
     procesar_solicitud.delay(json.loads(message.data.decode('utf-8'))["id"])
     message.ack()
 
-
+print("Empezó el demonio")
 credentials = compute_engine.Credentials()
 subscriber = pubsub_v1.SubscriberClient(credentials=credentials)
 subscription_path = subscriber.subscription_path("746411315164", 'cloud-miso-sub')

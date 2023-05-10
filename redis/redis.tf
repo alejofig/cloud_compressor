@@ -51,11 +51,10 @@ resource "google_compute_instance" "redis" {
     sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
     docker-compose --version
-    git clone -b bucket_jcra https://github.com/alejofig/cloud_compressor.git
+    git clone -b pubsub https://github.com/alejofig/cloud_compressor.git
     sudo chmod -R 777 /cloud_compressor
     cd cloud_compressor
     sudo docker-compose -f demonio.yml up -d
-    echo "terminado el script"
 
   EOF
   tags                    = ["redis"]
