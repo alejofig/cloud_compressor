@@ -132,6 +132,7 @@ def close_session(*args,**kwargs):
 
 
 def pubsub_callback(message):
+    print(message)
     procesar_solicitud.delay(json.loads(message.data.decode('utf-8'))["id"])
     message.ack()
 
@@ -140,11 +141,11 @@ def pubsub_callback(message):
 subscriber = pubsub_v1.SubscriberClient()
 subscription_path = subscriber.subscription_path("746411315164", 'cloud-miso-sub')
 
-# subscriber.subscribe(subscription_path, callback=pubsub_callback)
+subscriber.subscribe(subscription_path, callback=pubsub_callback)
 future = subscriber.subscribe(subscription_path, callback=pubsub_callback)
 with subscriber:
     try:
-        future.result(timeout=60)
+        future.result()
     except futures.TimeoutError:
         future.cancel()  # Trigger the shutdown.
-        future.result()  # Block until the shutdown is complete.
+

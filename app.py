@@ -54,9 +54,7 @@ def procesar():
     solicitudes_pendientes = Solicitud.query.filter_by(estado=EstadoSolicitud.pendiente).all()
     for solicitud in solicitudes_pendientes:
         message = json.dumps({'id': solicitud.id}).encode('utf-8')
-        publisher.publish(topic_path, data=message)
         solicitud.estado = EstadoSolicitud.queue
-        
         response = publisher.publish(topic_path, data=message)
         message_id = response.result()
         solicitud.fecha_cola = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')

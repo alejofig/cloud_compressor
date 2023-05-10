@@ -1,25 +1,35 @@
-import os
 from google.cloud import pubsub_v1
-from concurrent import futures
+import json
+import os
+# from celery import Celery
+
+# celery = Celery(__name__)
+# celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://redis:6379/0")
+# celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://redis:6379/0")
 
 
-project_id = '746411315164'
-topic_name = 'cloud-miso'
-sub_name ='cloud-miso-sub'
+# @celery.task()
+# def procesar_solicitud(id_solicitud):
+#     print(id_solicitud)
 
-
-def callback(message):
-    print("Received %s", message)
+def pubsub_callback(message):
+    print(message)
     message.ack()
 
 subscriber = pubsub_v1.SubscriberClient()
-subscription_path = subscriber.subscription_path(project_id, sub_name)
+subscription_path = subscriber.subscription_path("746411315164", 'cloud-miso-sub')
 
-future = subscriber.subscribe(subscription_path, callback=callback)
+def receive_messages(subscription_path):
+    subscriber = pubsub_v1.SubscriberClient()
+    while True:
+        request = pubsub_v1.types.PullRequest(
+            subscription=subscription_path, 
+            max_messages=1, 
+            return_immediately=True
+        )
+        response = subscriber.pull(request=request)
+        for message in response.received_messages:
+            pubsub_callback(message)
+        #subscriber.acknowledge(subscription_path, [ack_id for ack_id in response.ack_ids])
 
-with subscriber:
-    try:
-        future.result(timeout=5)
-    except futures.TimeoutError:
-        future.cancel()  # Trigger the shutdown.
-        future.result()  # Block until the shutdown is complete.
+receive_messages(subscription_path)
