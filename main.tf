@@ -32,7 +32,7 @@ resource "google_compute_firewall" "allow-http-web" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = [tolist(google_compute_instance.worker.tags)[0]]
+  target_tags   = ["worker"]
 }
 
 resource "google_compute_firewall" "allow-ssh-web" {
@@ -45,7 +45,7 @@ resource "google_compute_firewall" "allow-ssh-web" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   =[tolist(google_compute_instance.worker.tags)[0]]
+  target_tags   =["worker"]
 
 }
 
@@ -78,7 +78,7 @@ resource "google_compute_instance_template" "worker" {
     sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
     docker-compose --version
-    git clone -b bucket_jcra https://github.com/alejofig/cloud_compressor.git
+    git clone -b pubsub https://github.com/alejofig/cloud_compressor.git
     sudo chmod -R 777 /cloud_compressor
     cd cloud_compressor
     sudo docker-compose -f docker-compose-worker.yml up -d
@@ -100,7 +100,7 @@ resource "google_compute_autoscaler" "example" {
   target = google_compute_instance_group_manager.example.self_link
   zone = "us-central1-c"
   autoscaling_policy {
-    cool_down_period_sec = 60
+    cooldown_period = 60
     cpu_utilization {
       target = 0.3
     }

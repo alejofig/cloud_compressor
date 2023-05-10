@@ -57,7 +57,7 @@ resource "google_compute_instance" "database" {
 
     # Crea un usuario y una base de datos de ejemplo en PostgreSQL
     sudo -u postgres psql -c "CREATE USER postgres WITH PASSWORD 'example';"
-    sudo -u postgres psql -c "CREATE DATABASE example OWNER example;"
+    sudo -u postgres psql -c "CREATE DATABASE example OWNER postgres;"
   EOF
 }
 

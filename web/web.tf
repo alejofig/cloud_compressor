@@ -3,8 +3,8 @@ project = "746411315164"
 region = "us-central1"
 }
 
-resource "google_compute_network" "my-network6" {
-  name                    = "my-network6"
+resource "google_compute_network" "my-network7" {
+  name                    = "my-network7"
   auto_create_subnetworks = true
 }
 
@@ -36,7 +36,7 @@ tags = ["web"]
   }
 
   network_interface {
-  network = google_compute_network.my-network6.self_link
+  network = google_compute_network.my-network7.self_link
     access_config {
       // Ephemeral public IP
     }
@@ -86,7 +86,7 @@ module "lb" {
     name = "load-balancer"
     service_port = 80
     target_tags = ["my-target-pool"]
-    network = google_compute_network.my-network6.self_link
+    network = google_compute_network.my-network7.self_link
 }
 output "load_balancer_default_ip" {
   description = "The external ip address of the forwarding rule for default lb."
@@ -95,7 +95,7 @@ output "load_balancer_default_ip" {
 
   resource "google_compute_firewall" "ssh" {
     name    = "allow-ssh"
-    network = google_compute_network.my-network6.self_link
+    network = google_compute_network.my-network7.self_link
 
     allow {
       protocol = "tcp"
@@ -109,7 +109,7 @@ output "load_balancer_default_ip" {
 
 resource "google_compute_firewall" "allow-http-web3" {
   name    = "allow-http-web3"
-  network = google_compute_network.my-network6.self_link
+  network = google_compute_network.my-network7.self_link
 
   allow {
     protocol = "tcp"
@@ -123,7 +123,7 @@ resource "google_compute_firewall" "allow-http-web3" {
 
 resource "google_compute_firewall" "allow-all-outbound" {
   name    = "allow-all-outbound"
-  network = google_compute_network.my-network6.self_link
+  network = google_compute_network.my-network7.self_link
 
   allow {
     protocol = "tcp"

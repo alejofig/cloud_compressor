@@ -1,9 +1,7 @@
 #!/bin/bash
-export DATABASE_URL=postgresql://postgres:example@db:5432/example
+export DATABASE_URL=postgresql://postgres:example@34.69.89.10:5432/example
 export JWT_ALGORITHM="HS256"
 export JWT_SECRET_KEY="frase-secreta"
-export GOOGLE_APPLICATION_CREDENTIALS="/app/config/creds.json"
-export GCLOUD_PROJECT="746411315164"
 
 export FLASK_APP=/app/app.py
 echo $FLASK_APP
