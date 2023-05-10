@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import os
+import shutil
 import subprocess
 from email.mime.text import MIMEText
 from modelos.modelos import Archivo,EstadoConversion, EstadoConversionArchivo, EstadoSolicitud, Solicitud, TipoCompresion,db
@@ -71,15 +72,15 @@ def procesar_solicitud(id_solicitud):
     blob = bucket.blob(nombre_archivo)
     os.makedirs(os.path.dirname(nombre_archivo), exist_ok=True)
     blob.download_to_filename(nombre_archivo)
-
+    ruta_carpeta = nombre_archivo.split['.'][0]
     if archivo.formato_origen == TipoCompresion.zip.value:
-        comando = f'unzip {nombre_archivo}'
+        comando = f'unzip {nombre_archivo} -d {ruta_carpeta}'
     elif archivo.formato_origen == TipoCompresion.seven_z.value:
-        comando = f'7z x {nombre_archivo}'
+        comando = f'7z x {nombre_archivo} -o{ruta_carpeta}'
     elif archivo.formato_origen == TipoCompresion.tar_gz.value:
-        comando = f'tar -xzf {nombre_archivo}'
+        comando = f'tar -xzf {nombre_archivo} -C {ruta_carpeta}'
     elif archivo.formato_origen == TipoCompresion.tar_bz_dos.value:
-        comando = f'tar -xjf {nombre_archivo}'
+        comando = f'tar -xjf {nombre_archivo} -C {ruta_carpeta}'
     else:
         registro_conversion.estado = EstadoConversionArchivo.fallida
         archivo.estado = EstadoConversion.processed
@@ -87,15 +88,15 @@ def procesar_solicitud(id_solicitud):
         solicitud.fecha_finalizacion = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')
         db.session.commit()
         raise ValueError('El formato de archivo de origen no es válido')
-            
+    subprocess.call(comando, shell=True)        
     if archivo.formato_destino == TipoCompresion.zip.value:
-        comando = f'zip {archivo.url_modificado} *'
+        comando = f'zip {archivo.url_modificado} {ruta_carpeta}'
     elif archivo.formato_destino == TipoCompresion.seven_z.value:
-        comando = f'7z a {archivo.url_modificado} *'
+        comando = f'7z a {archivo.url_modificado} {ruta_carpeta}'
     elif archivo.formato_destino == TipoCompresion.tar_gz.value:
-        comando = f'tar -czf {archivo.url_modificado} *'
+        comando = f'tar -czf {archivo.url_modificado} {ruta_carpeta}'
     elif archivo.formato_destino == TipoCompresion.tar_bz_dos.value:
-        comando = f'tar -cjf {archivo.url_modificado} *'
+        comando = f'tar -cjf {archivo.url_modificado} {ruta_carpeta}'
     else:
         registro_conversion.estado = EstadoConversionArchivo.fallida
         archivo.estado = EstadoConversion.processed
@@ -109,6 +110,7 @@ def procesar_solicitud(id_solicitud):
     blob = bucket.blob(archivo.url_modificado)
     blob.upload_from_filename(archivo.url_modificado)
     os.remove(path_final)
+    shutil.rmtree(ruta_carpeta)
     # Actualizar el estado del archivo y la solicitud
     archivo.estado = EstadoConversion.processed
     registro_conversion.estado = EstadoConversionArchivo.exitosa

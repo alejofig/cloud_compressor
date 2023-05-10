@@ -19,7 +19,7 @@ COPY process_files.sh /app
 
 RUN chmod +x /app/process_files.sh
 # Instalamos el paquete cron
-RUN apt-get update && apt-get -y install cron p7zip-full
+RUN apt-get update && apt-get -y install cron p7zip-full zip unzip
 
 RUN export FLASK_APP=app.py
 
