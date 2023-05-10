@@ -12,9 +12,8 @@ from google.auth import compute_engine
 def create_task(request,user_id):
     # crear el cliente de gcp
     
-    # credentials = compute_engine.Credentials()
-    # client = storage.Client(credentials=credentials, project="746411315164")
-    client = storage.Client()
+    credentials = compute_engine.Credentials()
+    client = storage.Client(credentials=credentials, project="746411315164")
     # Por implementar el envío de los archivos
     file_name = request.form.get('fileName',None)
     new_format = request.form.get('newFormat',None)

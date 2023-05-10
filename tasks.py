@@ -1,21 +1,15 @@
 from datetime import datetime
 import json
 import os
-import shutil
 import subprocess
-import smtplib
 from email.mime.text import MIMEText
-import time
 from modelos.modelos import Archivo,EstadoConversion, EstadoConversionArchivo, EstadoSolicitud, Solicitud, TipoCompresion,db
-import boto3
 from celery import Celery
 from app import app
 from celery.signals import task_postrun
 from celery.signals import worker_process_init
 from google.cloud import storage
 from google.auth import compute_engine
-from google.cloud import pubsub_v1
-from concurrent import futures
 
 project_id = '746411315164'
 topic_name = 'cloud-miso'
@@ -43,9 +37,8 @@ celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://lo
 @celery.task()
 def procesar_solicitud(id_solicitud):
     # crear el cliente de gcp
-    # credentials = compute_engine.Credentials()
-    # client = storage.Client(credentials=credentials, project="746411315164")
-    client = storage.Client()
+    credentials = compute_engine.Credentials()
+    client = storage.Client(credentials=credentials, project="746411315164")
     bucket = client.get_bucket('bucket-cloud-compressor-alejo')
 
     print(f"Procesando la solicitud {id_solicitud}")

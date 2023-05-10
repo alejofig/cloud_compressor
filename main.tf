@@ -50,23 +50,23 @@ resource "google_compute_firewall" "allow-ssh-web" {
 }
 
 
-
-
-
-### WORKER
-resource "google_compute_instance" "worker" {
+resource "google_compute_instance_template" "worker" {
   name         = "worker"
   machine_type = "n1-standard-1"
-  zone         = local.zone
-  tags         = ["worker"]
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
-  service_account {
+  tags = ["worker"]
+    service_account {
     email  = "default"
-    scopes = ["https://www.googleapis.com/auth/devstorage.full_control"]
+    scopes = ["https://www.googleapis.com/auth/devstorage.full_control","https://www.googleapis.com/auth/pubsub"]
+  }
+  disk {
+    source_image = "debian-cloud/debian-11"
+    auto_delete = true
+  }
+  network_interface {
+  network = google_compute_network.my-network.self_link
+    access_config {
+      // Ephemeral public IP
+    }
   }
   metadata_startup_script = <<-EOF
     #!/bin/bash
@@ -84,19 +84,35 @@ resource "google_compute_instance" "worker" {
     sudo docker-compose -f docker-compose-worker.yml up -d
     echo "terminado el script"
     EOF
+}
 
-
-  # Conexión a la red
-  network_interface {
-    network = google_compute_network.my-network.self_link
-    access_config {
-      nat_ip = google_compute_address.worker.address
-    }
+resource "google_compute_instance_group_manager" "example" {
+  name = "group-workers"
+  zone = "us-central1-c"
+  base_instance_name = "worker"
+  version {
+  instance_template = google_compute_instance_template.worker.self_link
   }
 }
-### WORKER
 
-
-### Nfs
-
-###
+resource "google_compute_autoscaler" "example" {
+  name = "worker-autoscaler"
+  target = google_compute_instance_group_manager.example.self_link
+  zone = "us-central1-c"
+  autoscaling_policy {
+    cool_down_period_sec = 60
+    cpu_utilization {
+      target = 0.3
+    }
+    # custom_metric_utilizations {
+    #   metric = "pubsub.googleapis.com/subscription/num_undelivered_messages"
+    #   filter = "metric.type=\"pubsub.googleapis.com/subscription/num_undelivered_messages\" resource.type=\"pubsub_subscription\" resource.label.subscription_id=\"${google_pubsub_subscription.example.id}\""
+    #   utilization_target = 10
+    # }
+    # load_balancing_utilization {
+    #   utilization_target = 0.8
+    # }
+    max_replicas = 3
+    min_replicas = 1
+  }
+}

@@ -29,7 +29,10 @@ resource "google_compute_instance" "redis" {
       image = "debian-11"
     }
   }
-
+  service_account {
+    email  = "default"
+    scopes = ["https://www.googleapis.com/auth/pubsub"]
+  }
   network_interface {
     network = google_compute_network.my-network.self_link
     access_config {
@@ -43,6 +46,17 @@ resource "google_compute_instance" "redis" {
     sudo apt-get install -y redis-server
     sudo sed -i 's/bind 127.0.0.1 ::1/bind 0.0.0.0 ::1/' /etc/redis/redis.conf
     sudo systemctl restart redis.service
+    sudo apt-get install -y python3-pip
+    sudo apt-get install -y docker.io
+    sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+    docker-compose --version
+    git clone -b bucket_jcra https://github.com/alejofig/cloud_compressor.git
+    sudo chmod -R 777 /cloud_compressor
+    cd cloud_compressor
+    sudo docker-compose -f demonio.yml up -d
+    echo "terminado el script"
+
   EOF
   tags                    = ["redis"]
 }

@@ -11,6 +11,7 @@ import os
 import json
 from datetime import datetime
 from google.cloud import pubsub_v1
+from google.auth import compute_engine
 
 def create_app(config_name):
     application = Flask(__name__)
@@ -48,7 +49,8 @@ api.add_resource(VistaFiles, '/api/files/<filename>')
 
 @app.cli.command()
 def procesar():
-    publisher = pubsub_v1.PublisherClient()
+    credentials = compute_engine.Credentials()
+    publisher = pubsub_v1.PublisherClient(credentials=credentials)
     topic_path = publisher.topic_path("746411315164", "cloud-miso")
     """Run jobs"""
     solicitudes_pendientes = Solicitud.query.filter_by(estado=EstadoSolicitud.pendiente).all()

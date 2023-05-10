@@ -62,4 +62,3 @@ Werkzeug==2.2.3
 wrapt==1.15.0
 zipp==3.14.0
 google-cloud-pubsub
-celery_pubsub

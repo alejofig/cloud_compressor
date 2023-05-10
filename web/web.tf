@@ -43,7 +43,7 @@ tags = ["web"]
   }
   service_account {
     email  = "default"
-    scopes = ["https://www.googleapis.com/auth/devstorage.full_control"]
+    scopes = ["https://www.googleapis.com/auth/devstorage.full_control","https://www.googleapis.com/auth/pubsub"]
   }
   metadata_startup_script = <<-EOF
     #!/bin/bash
