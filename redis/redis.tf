@@ -55,6 +55,7 @@ resource "google_compute_instance" "redis" {
     sudo chmod -R 777 /cloud_compressor
     cd cloud_compressor
     sudo docker-compose -f demonio.yml up -d
+    echo "Hola"
   EOF
   tags                    = ["redis"]
 }

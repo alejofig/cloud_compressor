@@ -72,7 +72,7 @@ def procesar_solicitud(id_solicitud):
     blob = bucket.blob(nombre_archivo)
     os.makedirs(os.path.dirname(nombre_archivo), exist_ok=True)
     blob.download_to_filename(nombre_archivo)
-    ruta_carpeta = nombre_archivo.split['.'][0]
+    ruta_carpeta = nombre_archivo.split('.')[0]
     if archivo.formato_origen == TipoCompresion.zip.value:
         comando = f'unzip {nombre_archivo} -d {ruta_carpeta}'
     elif archivo.formato_origen == TipoCompresion.seven_z.value:
