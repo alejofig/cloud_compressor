@@ -109,10 +109,8 @@ def procesar_solicitud(id_solicitud):
     # Guardar el archivo en el bucket
     blob = bucket.blob(archivo.url_modificado)
     blob.upload_from_filename(archivo.url_modificado)
-    os.remove(nombre_archivo)
-    os.remove(archivo.url_modificado)
+    os.remove(path_final)
     shutil.rmtree(ruta_carpeta)
-
     # Actualizar el estado del archivo y la solicitud
     archivo.estado = EstadoConversion.processed
     registro_conversion.estado = EstadoConversionArchivo.exitosa

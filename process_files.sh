@@ -1,5 +1,5 @@
 #!/bin/bash
-export DATABASE_URL=postgresql://postgres:example@34.170.129.9:5432/example
+export DATABASE_URL=postgresql://postgres:example@35.226.170.82:5432/example
 export JWT_ALGORITHM="HS256"
 export JWT_SECRET_KEY="frase-secreta"
 

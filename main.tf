@@ -82,7 +82,6 @@ resource "google_compute_instance_template" "worker" {
     sudo chmod -R 777 /cloud_compressor
     cd cloud_compressor
     sudo docker-compose -f docker-compose-worker.yml up -d
-    echo "empezando el script"
     EOF
 }
 
