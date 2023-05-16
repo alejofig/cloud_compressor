@@ -121,7 +121,7 @@ def get_tasks(request,user_id):
             if order is not None and int(order) == 1:
                 tareas = sorted(tareas, key=lambda x: x['id'], reverse=True)
             # Devolver el resultado en formato JSON
-        return make_response(jsonify(tareas) if tareas else [], 200)
+        return make_response(jsonify(tareas) if tareas else make_response(jsonify({'message': 'No hay solicitudes'})))
     else:
         return []
     return make_response(jsonify({'mensaje': 'No autorizado'}), 401)
